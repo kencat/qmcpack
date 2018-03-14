@@ -200,6 +200,7 @@ public:
    * renmaed from Collectables to CollectableResultBuffer.
    */
   Buffer_t CollectableResultBuffer;
+  Buffer_t CollectableResultBufferMasterOnly;
 
   ///clones of this object: used by the thread pool
   std::vector<ParticleSet*> myClones;
