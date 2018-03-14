@@ -285,7 +285,14 @@ struct QMCHamiltonianBase: public QMCTraits
     return 0;
   }
   virtual Return_t evaluate(ParticleSet& P, std::vector<NonLocalData>& Txy) = 0;
-  
+
+  /** evaluate from the SampleStacks
+   *@param CollectabeResultBufferMasterOnly buffer to collecte the Result from the SampleStacks
+   *@param W MCWalkerConfiguration clones
+   *@return the value of the Hamiltonian
+   */
+  virtual Return_t evaluatefromSampleStacks(MCWalkerConfiguration& W, BufferType& CollectableResultBufferMasterOnly) const { }
+
   /** evaluate value and derivatives wrt the optimizables
    *
    * Default uses evaluate

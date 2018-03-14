@@ -204,6 +204,9 @@ public:
   void auxHevaluate(ParticleSet& P, Walker_t& ThisWalker);
   void auxHevaluate(ParticleSet& P, Walker_t& ThisWalker, bool do_properties, bool do_collectables);
   void rejectedMove(ParticleSet& P, Walker_t& ThisWalker);
+
+  void evaluatefromSampleStacks(MCWalkerConfiguration &W, BufferType &CollectableResultBufferMasterOnly);
+
   ///** set Tau for each Hamiltonian
   // */
   //inline void setTau(RealType tau)
@@ -326,6 +329,8 @@ private:
   int CollectableResultBufferSize;
   ///enable virtual moves 
   bool EnableVirtualMoves;
+  ///a switch to use old method or new method
+  bool switchEvaluatefromSampleStacks=false;
   ///Current Local Energy
   Return_t LocalEnergy;
   ///Current Kinetic Energy

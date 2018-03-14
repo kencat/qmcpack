@@ -473,6 +473,29 @@ QMCHamiltonian::evaluate(ParticleSet& P)
   // auxHevaluate(P);
   return LocalEnergy;
 }
+
+/** Evaluate all the Hamiltonians for the N-particle  configuration
+ *  *@param P input configuration containing N particles
+ *   *@return the local energy
+ *    */
+void
+QMCHamiltonian::evaluatefromSampleStacks(MCWalkerConfiguration &W, BufferType &CollectableResultBufferMasterOnly)
+{
+  //const auto& Pos(getSample(iw));
+  int iw=0;
+  //auto temp=W;
+  if(switchEvaluatefromSampleStacks)
+  {
+    //for(int iw=0;iw<W.numSamples();iw++)
+    //{
+    //  temp += W.getSample(iw);
+    //}
+  }
+  else
+  {
+    //do nothing
+  }
+}
     
 QMCHamiltonian::RealType 
 QMCHamiltonian::evaluateValueAndDerivatives(ParticleSet& P,
