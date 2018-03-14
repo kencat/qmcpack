@@ -234,6 +234,19 @@ namespace qmcplusplus
     return 0.0;
   }
 
+  void SpinDensity::auxHevaluatefromSampleStacks(BufferType &CollectableResultBufferMasterOnly, std::vector<MCWalkerConfiguration*> &Ws)
+  {
+    for(int tid=0;tid<Ws.size();tid++)
+    {
+      for(int iw=0;iw<Ws[tid]->numSamples();iw++)
+      {
+        //CollectableResultBufferMasterOnly += Ws[tid]->getSample(iw)->R;
+        //get the weight and the R from the SampleSatcks
+        //and get them to the grid and store them to the CollectablesBuffer
+
+      }
+    }
+  }
 
   void SpinDensity::test(int moves,ParticleSet& P)
   {
