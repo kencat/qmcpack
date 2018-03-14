@@ -205,7 +205,15 @@ public:
   void auxHevaluate(ParticleSet& P, Walker_t& ThisWalker, bool do_properties, bool do_collectables);
   void rejectedMove(ParticleSet& P, Walker_t& ThisWalker);
 
-  void evaluatefromSampleStacks(MCWalkerConfiguration &W, BufferType &CollectableResultBufferMasterOnly);
+  /** Evaluate all the Hamiltonians out of the loop
+   * @param CollectableResultBufferMasterOnly
+   * @param Ws MCwalkerConfiguration's vector
+   */
+  void auxHevaluatefromSampleStacks(BufferType &CollectableResultBufferMasterOnly, std::vector<MCWalkerConfiguration*> &Ws)
+  {
+    for(int i=0; i<auxH.size(); ++i)
+      auxH[i]->auxHvaluatefromSampleStacks(CollectableResultBufferMasterOnly, Ws);
+  }
 
   ///** set Tau for each Hamiltonian
   // */
@@ -329,8 +337,6 @@ private:
   int CollectableResultBufferSize;
   ///enable virtual moves 
   bool EnableVirtualMoves;
-  ///a switch to use old method or new method
-  bool switchEvaluatefromSampleStacks=false;
   ///Current Local Energy
   Return_t LocalEnergy;
   ///Current Kinetic Energy
