@@ -234,7 +234,7 @@ namespace qmcplusplus
     return 0.0;
   }
 
-  void SpinDensity::auxHevaluatefromSampleStacks(BufferType &CollectableResultBufferMasterOnly, std::vector<MCWalkerConfiguration*> &Ws)
+  void SpinDensity::auxHevaluatefromSampleStack(BufferType &CollectableResultBufferMasterOnly, std::vector<MCWalkerConfiguration*> &Ws)
   {
     for(int tid=0;tid<Ws.size();tid++)
     {
