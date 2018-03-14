@@ -310,6 +310,12 @@ bool DMCOMP::run()
         for(int ip=1; ip<NumThreads; ++ip)
           W.CollectableResultBuffer += wClones[ip]->CollectableResultBuffer;
       }
+      //Collect the result from Sample Stacks of MCWalkerConfiguration directly out of the thread loop
+      if(W.CollectableResultBuffer.size())
+      {
+        hClones[0]->auxHevaluatefromSampleStacks(W.CollectableResultBufferMasterOnly, wClones);
+      }
+
       branchEngine->branch(CurrentStep, W, branchClones);
       //         if(storeConfigs && (CurrentStep%storeConfigs == 0)) {
       //           ForwardWalkingHistory.storeConfigsForForwardWalking(W);
