@@ -209,10 +209,10 @@ public:
    * @param CollectableResultBufferMasterOnly
    * @param Ws MCwalkerConfiguration's vector
    */
-  void auxHevaluatefromSampleStack(BufferType &CollectableResultBufferMasterOnly, std::vector<MCWalkerConfiguration*> &Ws)
+  void auxHevaluatefromSampleStacks(BufferType &CollectableResultBufferMasterOnly, std::vector<MCWalkerConfiguration*> &Ws)
   {
     for(int i=0; i<auxH.size(); ++i)
-      auxH[i]->auxHvaluatefromSampleStack(CollectableResultBufferMasterOnly, Ws);
+      auxH[i]->auxHvaluatefromSampleStacks(CollectableResultBufferMasterOnly, Ws);
   }
 
   ///** set Tau for each Hamiltonian

@@ -313,7 +313,7 @@ bool DMCOMP::run()
       //Collect the result from Sample Stacks of MCWalkerConfiguration directly out of the thread loop
       if(W.CollectableResultBuffer.size())
       {
-        hClones[0]->auxHevaluatefromSampleStack(W.CollectableResultBufferMasterOnly, wClones);
+        hClones[0]->auxHevaluatefromSampleStacks(W.CollectableResultBufferMasterOnly, wClones);
       }
 
       branchEngine->branch(CurrentStep, W, branchClones);

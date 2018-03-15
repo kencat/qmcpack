@@ -293,7 +293,7 @@ struct QMCHamiltonianBase: public QMCTraits
    *@param W MCWalkerConfiguration clones
    *@return the value of the Hamiltonian
    */
-  virtual void auxHvaluatefromSampleStack(BufferType &CollectableResultBufferMasterOnly, std::vector<MCWalkerConfiguration*> &Ws) const { }
+  virtual void auxHvaluatefromSampleStacks(BufferType &CollectableResultBufferMasterOnly, std::vector<MCWalkerConfiguration*> &Ws) const { }
 
   /** evaluate value and derivatives wrt the optimizables
    *
