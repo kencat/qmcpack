@@ -220,11 +220,11 @@ struct QMCHamiltonianBase: public QMCTraits
 
   /** named values to  the property list
    * @param plist RecordNameProperty
-   * @param collectables Observables that are accumulated by evaluate
+   * @param CollectableResultBuffer Observables that are accumulated by evaluate
    *
    * Default implementaton uses addValue(plist)
    */
-  virtual void addObservables(PropertySetType& plist, BufferType& collectables)
+  virtual void addObservables(PropertySetType& plist, BufferType& CollectableResultBuffer)
   {
     addValue(plist);
   }
@@ -293,7 +293,7 @@ struct QMCHamiltonianBase: public QMCTraits
    *@param W MCWalkerConfiguration clones
    *@return the value of the Hamiltonian
    */
-  virtual void auxHvaluatefromSampleStacks(BufferType &CollectableResultBufferMasterOnly, std::vector<MCWalkerConfiguration*> &Ws) const { }
+  virtual void auxHevaluatefromSampleStacks(BufferType &CollectableResultBufferMasterOnly, std::vector<MCWalkerConfiguration*> &Ws) const { }
 
   /** evaluate value and derivatives wrt the optimizables
    *
