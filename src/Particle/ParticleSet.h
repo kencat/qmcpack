@@ -293,11 +293,18 @@ public:
    */
   int getTable(const ParticleSet& psrc);
 
-  /** reset all the collectable quantities during a MC iteration
+  /** reset all the CollectableResultBuffer quantities during a MC iteration
    */
   inline void resetCollectableResultBuffer()
   {
     std::fill(CollectableResultBuffer.begin(),CollectableResultBuffer.end(),0.0);
+  }
+
+  /** reset the CollectableResultBufferMasterOnly quantities during a MC iteration
+   */
+  inline void resetCollectableResultBufferMasterOnly()
+  {
+    std::fill(CollectableResultBufferMasterOnly.begin(),CollectableResultBufferMasterOnly.end(),0.0);
   }
 
   /** update the internal data
