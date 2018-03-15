@@ -337,8 +337,11 @@ public:
   void saveEnsemble();
   ///save the position of current walkers
   void saveEnsemble(iterator first, iterator last);
-  /// get a single sample from SampleStack
-  const ParticlePos_t& getSample(size_t iw) const;
+  /// get a single sample positon R from SampleStack
+  const ParticlePos_t& getSampleR(size_t iw) const;
+  /// get a single sample weight from SampleStack
+  const EstimatorRealType& getSampleWeight(size_t iw) const;
+
   /** load SampleStack data to current walkers
    */
   void loadEnsemble();

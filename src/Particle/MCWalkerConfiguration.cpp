@@ -51,9 +51,10 @@ struct MCSample
   ParticleSet::ParticleGradient_t G;
   ParticleSet::ParticleLaplacian_t L;
   ParticleSet::RealType LogPsi, Sign, PE, KE;
+  ParticleSet::EstimatorRealType Weight;
 
   inline MCSample(const Walker_t& w)
-    :R(w.R), G(w.G), L(w.L)
+    :R(w.R), G(w.G), L(w.L), Weight(w.Weight)
   {
     LogPsi=w.Properties(LOGPSI);
     Sign=w.Properties(SIGN);
@@ -73,6 +74,7 @@ struct MCSample
     R=w.R;
     G=w.G;
     L=w.L;
+    Weight=w.Weight;
     LogPsi=w.Properties(LOGPSI);
     Sign=w.Properties(SIGN);
     PE=w.Properties(LOCALPOTENTIAL);
@@ -84,6 +86,7 @@ struct MCSample
     w.R=R;
     w.G=G;
     w.L=L;
+    w.Weight=Weight;
     w.Properties(LOGPSI)=LogPsi;
     w.Properties(SIGN)=Sign;
     w.Properties(LOCALPOTENTIAL)=PE;
@@ -419,13 +422,22 @@ void MCWalkerConfiguration::saveEnsemble(iterator first, iterator last)
   }
 }
 
-/** get a single sample from SampleStack
+/** get a single sample postion R from SampleStack
  */
 const ParticleSet::ParticlePos_t&
-MCWalkerConfiguration::getSample(size_t iw) const
+MCWalkerConfiguration::getSampleR(size_t iw) const
 {
   return SampleStack[iw]->R;
 }
+
+/** get a single sample weight from SampleStack
+ */
+const ParticleSet::EstimatorRealType&
+MCWalkerConfiguration::getSampleWeight(size_t iw) const
+{
+  return SampleStack[iw]->Weight;
+}
+
 
 /** load SampleStack to WalkerList
  */
