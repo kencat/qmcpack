@@ -313,8 +313,10 @@ bool DMCOMP::run()
       //Collect the result from Sample Stacks of MCWalkerConfiguration directly out of the thread loop
       //if(W.CollectableResultBuffer.size())
       //{
+        app_log()<< "!here no problem"<< std::endl;
         W.resetCollectableResultBufferMasterOnly();
-        hClones[0]->getHamiltonian(5)->auxHevaluatefromSampleStacks(W.CollectableResultBufferMasterOnly, wClones);
+        app_log()<< "!pass reset"<< std::endl;
+        hClones[0]->getHamiltonian("SpinDensity")->auxHevaluatefromSampleStacks(W.CollectableResultBufferMasterOnly, wClones);
       //}
 
       branchEngine->branch(CurrentStep, W, branchClones);
