@@ -56,8 +56,8 @@ class SpinDensity : public QMCHamiltonianBase
   void auxHevaluatefromSampleStacks(BufferType &CollectableResultBufferMasterOnly, std::vector<MCWalkerConfiguration*> &Ws);
 
 
-  //required for Collectables interface
-  void addObservables(PropertySetType& plist,BufferType& olist);
+  //required for CollectableResultBuffer interface
+  void addObservables(PropertySetType& plist,BufferType& CollectableResultBuffer);
   void registerCollectables(std::vector<observable_helper*>& h5desc, hid_t gid) const ;
 
   //should be empty for Collectables interface
