@@ -212,7 +212,7 @@ public:
   void auxHevaluatefromSampleStacks(BufferType &CollectableResultBufferMasterOnly, std::vector<MCWalkerConfiguration*> &Ws)
   {
     for(int i=0; i<auxH.size(); ++i)
-      auxH[i]->auxHvaluatefromSampleStacks(CollectableResultBufferMasterOnly, Ws);
+      auxH[i]->auxHevaluatefromSampleStacks(CollectableResultBufferMasterOnly, Ws);
   }
 
   ///** set Tau for each Hamiltonian
