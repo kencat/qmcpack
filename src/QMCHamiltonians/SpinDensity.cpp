@@ -244,20 +244,21 @@ namespace qmcplusplus
     CollectableResultBufferMasterOnly.add(tmp.begin(),tmp.end());
     int offset = myIndex;
     for(int tid=0;tid<Ws.size();tid++)
-    {
-      int p = 0;
-      for(int s=0; s<nspecies; ++s, offset+=npoints)
-        for(int ns=0; ns<Ws[tid]->numSamples(); ++ns, ++p)
-        {
-          RealType Weight = Ws[tid]->getSampleWeight(ns);
-          ParticleSet::ParticlePos_t R = Ws[tid]->getSampleR(ns);
-          PosType u = cell.toUnit(R[p]-corner);
-          int point = offset;
-          for(int d=0; d<DIM; ++d)
-            point += gdims[d]*((int)(grid[d]*(u[d]-std::floor(u[d]))));
-          CollectableResultBufferMasterOnly[point] += Weight;
-        }
-    }
+      for(int ns=0; ns<Ws[tid]->numSamples(); ++ns)
+      {
+        int p = 0;
+        RealType Weight = Ws[tid]->getSampleWeight(ns);
+        ParticleSet::ParticlePos_t R = Ws[tid]->getSampleR(ns);
+        for(int s=0; s<nspecies; ++s, offset+=npoints)
+          for(int ps=0;ps<species_size[s];++ps,++p)
+          {
+            PosType u = cell.toUnit(R[p]-corner);
+            int point = offset;
+            for(int d=0; d<DIM; ++d)
+              point += gdims[d]*((int)(grid[d]*(u[d]-std::floor(u[d]))));
+            CollectableResultBufferMasterOnly[point] += Weight;
+          }
+      }
   }
 
   void SpinDensity::test(int moves,ParticleSet& P)
