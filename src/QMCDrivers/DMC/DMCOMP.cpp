@@ -310,15 +310,6 @@ bool DMCOMP::run()
         for(int ip=1; ip<NumThreads; ++ip)
           W.CollectableResultBuffer += wClones[ip]->CollectableResultBuffer;
       }
-      //Collect the result from Sample Stacks of MCWalkerConfiguration directly out of the thread loop
-      //if(W.CollectableResultBuffer.size())
-      //{
-        app_log()<< "!here no problem"<< std::endl;
-        W.resetCollectableResultBufferMasterOnly();
-        app_log()<< "!pass reset"<< std::endl;
-        hClones[0]->getHamiltonian("SpinDensity")->auxHevaluatefromSampleStacks(W.CollectableResultBufferMasterOnly, wClones);
-      //}
-
       branchEngine->branch(CurrentStep, W, branchClones);
       //         if(storeConfigs && (CurrentStep%storeConfigs == 0)) {
       //           ForwardWalkingHistory.storeConfigsForForwardWalking(W);
