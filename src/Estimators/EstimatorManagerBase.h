@@ -272,6 +272,12 @@ protected:
    * Do not need to clone: owned by the master thread
    */
   CollectablesEstimator* Collectables;
+  /** pointer to the CollectablesEstimatorMasterOnly
+   *
+   * owned Only by the master thread
+   * to handle the ColletableResultBufferMasterOnly
+   */
+  CollectablesEstimator* CollectablesMasterOnly;
   /** accumulator for the energy
    *
    * @todo expand it for all the scalar observables to report the final results

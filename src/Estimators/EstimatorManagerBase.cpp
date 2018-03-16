@@ -56,7 +56,7 @@ enum {COLLECT=0,
 EstimatorManagerBase::EstimatorManagerBase(Communicate* c)
   : RecordCount(0),h_file(-1), FieldWidth(20)
   , MainEstimatorName("LocalEnergy"), Archive(0), DebugArchive(0)
-  , myComm(0), MainEstimator(0), Collectables(0)
+  , myComm(0), MainEstimator(0), Collectables(0), CollectablesMasterOnly(0)
   , max4ascii(8)
 {
   setCommunicator(c);
@@ -65,7 +65,7 @@ EstimatorManagerBase::EstimatorManagerBase(Communicate* c)
 EstimatorManagerBase::EstimatorManagerBase(EstimatorManagerBase& em)
   : RecordCount(0),h_file(-1), FieldWidth(20)
   , MainEstimatorName(em.MainEstimatorName), Options(em.Options), Archive(0), DebugArchive(0)
-  , myComm(0), MainEstimator(0), Collectables(0)
+  , myComm(0), MainEstimator(0), Collectables(0), CollectablesMasterOnly(0)
   , EstimatorMap(em.EstimatorMap), max4ascii(em.max4ascii)
 {
   //inherit communicator
@@ -84,6 +84,8 @@ EstimatorManagerBase::~EstimatorManagerBase()
   delete_iter(h5desc.begin(), h5desc.end());
   if(Collectables)
     delete Collectables;
+  if(CollectablesMasterOnly)
+    delete CollectablesMasterOnly;
 }
 
 void EstimatorManagerBase::setCommunicator(Communicate* c)
@@ -129,6 +131,8 @@ void EstimatorManagerBase::reset()
   max4ascii+=BlockAverages.size();
   if(Collectables)
     Collectables->add2Record(BlockAverages);
+  if(CollectablesMasterOnly)
+    CollectablesMasterOnly->add2Record(BlockAverages);
 }
 
 void EstimatorManagerBase::resetTargetParticleSet(ParticleSet& p)
@@ -161,12 +165,13 @@ void EstimatorManagerBase::start(int blocks, bool record)
   energyAccumulator.clear();
   varAccumulator.clear();
   int nc=(Collectables)?Collectables->size():0;
+  int ncmo=(CollectablesMasterOnly)?CollectablesMasterOnly->size():0;
   BlockAverages.setValues(0.0);
-  AverageCache.resize(BlockAverages.size()+nc);
+  AverageCache.resize(BlockAverages.size()+nc+ncmo);
   //SquaredAverageCache.resize(BlockAverages.size()+nc);
   PropertyCache.resize(BlockProperties.size());
   //count the buffer size for message
-  BufferSize=2*AverageCache.size()+PropertyCache.size();
+  BufferSize=AverageCache.size()+PropertyCache.size();
   int sources=2;
   //allocate buffer for data collection
   if(RemoteData.empty())
@@ -509,6 +514,11 @@ bool EstimatorManagerBase::put(MCWalkerConfiguration& W, QMCHamiltonian& H, xmlN
   {
     app_log() << "  Using CollectablesEstimator for collectables, e.g. sk, gofr, density " << std::endl;
     Collectables=new CollectablesEstimator(H);
+  }
+  //CollectablesMasterOnly
+  if(CollectablesMasterOnly == 0 && H.sizeOfCollectableResultBufferMasterOnly())
+  {
+    CollectablesMasterOnly = new CollectablesEstimator(H);
   }
   return true;
 }
