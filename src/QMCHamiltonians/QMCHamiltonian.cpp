@@ -31,7 +31,7 @@ namespace qmcplusplus
 /** constructor
 */
 QMCHamiltonian::QMCHamiltonian()
-  :myIndex(0),CollectableResultBufferSize(0),EnableVirtualMoves(false)
+  :myIndex(0),CollectableResultBufferSize(0),CollectableResultBufferMasterOnlySize(0),EnableVirtualMoves(false)
 #if !defined(REMOVE_TRACEMANAGER)
   , id_sample(0),pid_sample(0),step_sample(0),gen_sample(0),age_sample(0),mult_sample(0),weight_sample(0),position_sample(0)
 {
@@ -183,6 +183,7 @@ int QMCHamiltonian::addObservables(ParticleSet& P)
   for(int i=1; i<Observables.size(); ++i)
     last_obs=P.PropertyList.add(Observables.Names[i]);
   CollectableResultBufferSize=P.CollectableResultBuffer.size();
+  CollectableResultBufferMasterOnlySize=P.CollectableResultBufferMasterOnly.size();
   app_log() << "\n  QMCHamiltonian::add2WalkerProperty added"
             << "\n    " << Observables.size()  << " to P::PropertyList "
             << "\n    " <<  P.CollectableResultBuffer.size() << " to P::CollectableResultBuffer "
