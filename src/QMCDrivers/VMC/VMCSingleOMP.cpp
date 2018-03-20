@@ -105,12 +105,13 @@ bool VMCSingleOMP::run()
       //Movers[ip]->stopBlock(false);
     }//end-of-parallel for
 
-    CurrentStep+=nSteps;
-    EstimatorAgent->aggregateThreadsAndRanks(EstimatorAgentClones, acceptRatio());
     //Collect the result from Sample Stacks of MCWalkerConfiguration directly out of the thread loop
-    app_log() <<"! test"<< W.CollectableResultBuffer.size() <<std::endl;
     W.resetCollectableResultBufferMasterOnly();
     H.getHamiltonian("SpinDensity")->auxHevaluatefromSampleStacks(W.CollectableResultBufferMasterOnly, wClones);
+    EstimatorAgent->accumulateCollectables(W);
+
+    CurrentStep+=nSteps;
+    EstimatorAgent->aggregateThreadsAndRanks(EstimatorAgentClones, acceptRatio());
 
 #if !defined(REMOVE_TRACEMANAGER)
     Traces->write_buffers(traceClones, block);
