@@ -23,7 +23,7 @@ namespace qmcplusplus
 {
 
 QMCHamiltonianBase::QMCHamiltonianBase()
-  :myIndex(-1),Value(0.0),Dependants(0),tWalker(0)
+  :myIndex(-1),Value(0.0),Dependants(0),tWalker(0),switchEvaluatefromSampleStacks(false)
 {
   quantum_domain       = no_quantum_domain;
   energy_domain        = no_energy_domain;

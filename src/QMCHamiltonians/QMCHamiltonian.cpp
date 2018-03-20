@@ -174,10 +174,12 @@ int QMCHamiltonian::addObservables(ParticleSet& P)
   //ParticleSet::mcObservables (large data, e.g. density) are accumulated while evaluations
   P.CollectableResultBuffer.clear();
   P.CollectableResultBuffer.rewind();
+  P.CollectableResultBufferMasterOnly.clear();
+  P.CollectableResultBufferMasterOnly.rewind();
   for(int i=0; i<H.size(); ++i)
     H[i]->addObservables(Observables,P.CollectableResultBuffer);
   for(int i=0; i<auxH.size(); ++i)
-    auxH[i]->addObservables(Observables,P.CollectableResultBuffer);
+    auxH[i]->addObservablesCollectables(Observables,P.CollectableResultBuffer,P.CollectableResultBufferMasterOnly);
   int last_obs;
   myIndex=P.PropertyList.add(Observables.Names[0]);
   for(int i=1; i<Observables.size(); ++i)
@@ -196,10 +198,12 @@ void QMCHamiltonian::resetObservables(int start, int ncollects)
   Observables.clear();
   BufferType collectableBuffer;
   collectableBuffer.rewind();
+  BufferType collectableBufferMasterOnly;
+  collectableBufferMasterOnly.rewind();
   for(int i=0; i<H.size(); ++i)
     H[i]->addObservables(Observables,collectableBuffer);
   for(int i=0; i<auxH.size(); ++i)
-    auxH[i]->addObservables(Observables,collectableBuffer);
+    auxH[i]->addObservablesCollectables(Observables,collectableBuffer,collectableBufferMasterOnly);
   if(collectableBuffer.size() != ncollects)
   {
     APP_ABORT("  QMCHamiltonian::resetObservables CollectableResultBufferSize != ncollects");

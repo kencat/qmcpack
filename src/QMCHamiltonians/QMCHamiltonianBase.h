@@ -117,7 +117,7 @@ struct QMCHamiltonianBase: public QMCTraits
   ///name of dependent object: to be removed
   std::string depName;
   ///a switch to use old method or new method
-  bool switchEvaluatefromSampleStacks=false;
+  bool switchEvaluatefromSampleStacks;
 
 #if !defined(REMOVE_TRACEMANAGER)
   ///whether traces are being collected
@@ -224,7 +224,12 @@ struct QMCHamiltonianBase: public QMCTraits
    *
    * Default implementaton uses addValue(plist)
    */
-  virtual void addObservables(PropertySetType& plist, BufferType& CollectableResultBuffer)
+  virtual void addObservables(PropertySetType& plist,BufferType& CollectableResultBuffer)
+  {
+    addValue(plist);
+  }
+
+  virtual void addObservablesCollectables(PropertySetType& plist,BufferType& CollectableResultBuffer,BufferType& CollectableResultBufferMasterOnly)
   {
     addValue(plist);
   }
@@ -293,7 +298,7 @@ struct QMCHamiltonianBase: public QMCTraits
    *@param W MCWalkerConfiguration clones
    *@return the value of the Hamiltonian
    */
-  virtual void auxHevaluatefromSampleStacks(BufferType &CollectableResultBufferMasterOnly, std::vector<MCWalkerConfiguration*> &Ws) const { }
+  virtual int auxHevaluatefromSampleStacks(BufferType &CollectableResultBufferMasterOnly, std::vector<MCWalkerConfiguration*> &Ws) const { app_log()<<"! base" <<std::endl; return 0; }
 
   /** evaluate value and derivatives wrt the optimizables
    *
