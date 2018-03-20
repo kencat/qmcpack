@@ -53,11 +53,12 @@ class SpinDensity : public QMCHamiltonianBase
   {
     return evaluate(P); 
   }
-  void auxHevaluatefromSampleStacks(BufferType &CollectableResultBufferMasterOnly, std::vector<MCWalkerConfiguration*> &Ws);
+  int auxHevaluatefromSampleStacks(BufferType &CollectableResultBufferMasterOnly, std::vector<MCWalkerConfiguration*> &Ws) const;
 
 
   //required for CollectableResultBuffer interface
   void addObservables(PropertySetType& plist,BufferType& CollectableResultBuffer);
+  void addObservablesCollectables(PropertySetType& plist,BufferType& CollectableResultBuffer,BufferType& CollectableResultBufferMasterOnly);
   void registerCollectables(std::vector<observable_helper*>& h5desc, hid_t gid) const ;
 
   //should be empty for Collectables interface

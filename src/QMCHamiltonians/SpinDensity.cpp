@@ -22,6 +22,7 @@ namespace qmcplusplus
 
   SpinDensity::SpinDensity(ParticleSet& P)
   {
+    switchEvaluatefromSampleStacks = true;
     // get particle information
     SpeciesSet& species = P.getSpeciesSet();
     nspecies = species.size();
@@ -182,13 +183,27 @@ namespace qmcplusplus
   }
 
 
-  void SpinDensity::addObservables(PropertySetType& plist,BufferType& CollectableResultBuffer)
+  void SpinDensity::addObservables(PropertySetType& plist,
+                                   BufferType& CollectableResultBuffer)
   {
     myIndex=CollectableResultBuffer.current();
     std::vector<RealType> tmp(nspecies*npoints);
     CollectableResultBuffer.add(tmp.begin(),tmp.end());
   }
 
+  void SpinDensity::addObservablesCollectables(PropertySetType& plist,
+                                   BufferType& CollectableResultBuffer,
+                                   BufferType& CollectableResultBufferMasterOnly)
+  {
+    myIndex=CollectableResultBuffer.current();
+    std::vector<RealType> tmp(nspecies*npoints);
+    CollectableResultBuffer.add(tmp.begin(),tmp.end());
+    if(switchEvaluatefromSampleStacks)
+    {
+      CollectableResultBufferMasterOnly.add(tmp.begin(),tmp.end());
+      app_log()<<"! BufferMasterOnly"<<std::endl;
+    }
+  }
 
   void SpinDensity::registerCollectables(std::vector<observable_helper*>& h5desc, hid_t gid) const 
   {
@@ -216,6 +231,7 @@ namespace qmcplusplus
     if(!switchEvaluatefromSampleStacks)
     {
       RealType w=tWalker->Weight;
+      app_log() << "!weight "<< w << std::endl;
       int p=0;
       int offset = myIndex;
       for(int s=0;s<nspecies;++s,offset+=npoints)
@@ -241,7 +257,7 @@ namespace qmcplusplus
     return 0.0;
   }
 
-  void SpinDensity::auxHevaluatefromSampleStacks(BufferType &CollectableResultBufferMasterOnly, std::vector<MCWalkerConfiguration*> &Ws)
+  int SpinDensity::auxHevaluatefromSampleStacks(BufferType &CollectableResultBufferMasterOnly, std::vector<MCWalkerConfiguration*> &Ws) const
   {
     //get the weight and the R from the SampleSatcks
     //and get them to the point of grid 
@@ -249,14 +265,15 @@ namespace qmcplusplus
     //switchEvaluatefromSampleStacks=true;
     if(switchEvaluatefromSampleStacks)
     {
-      std::vector<RealType> tmp(nspecies*npoints);
-      CollectableResultBufferMasterOnly.add(tmp.begin(),tmp.end());
-      int offset = myIndex;
+      //std::vector<RealType> tmp(nspecies*npoints);
+      //CollectableResultBufferMasterOnly.add(tmp.begin(),tmp.end());
       for(int tid=0;tid<Ws.size();tid++)
         for(int ns=0; ns<Ws[tid]->numSamples(); ++ns)
         {
           int p = 0;
+          int offset = myIndex;
           RealType Weight = Ws[tid]->getSampleWeight(ns);
+          //app_log() << "!weight "<< Weight << std::endl;
           ParticleSet::ParticlePos_t R = Ws[tid]->getSampleR(ns);
           for(int s=0; s<nspecies; ++s, offset+=npoints)
             for(int ps=0;ps<species_size[s];++ps,++p)
@@ -268,11 +285,13 @@ namespace qmcplusplus
               CollectableResultBufferMasterOnly[point] += Weight;
             }
         }
-     }
-     else
-     {
-       //do nothing
-     }
+      app_log() << "!test "<< CollectableResultBufferMasterOnly[0]<<CollectableResultBufferMasterOnly[1]<< std::endl;
+    }
+    else
+    {
+      //do nothing
+    }
+    return 1;
   }
 
   void SpinDensity::test(int moves,ParticleSet& P)
