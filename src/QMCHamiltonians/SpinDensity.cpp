@@ -201,7 +201,6 @@ namespace qmcplusplus
     if(switchEvaluatefromSampleStacks)
     {
       CollectableResultBufferMasterOnly.add(tmp.begin(),tmp.end());
-      app_log()<<"! BufferMasterOnly"<<std::endl;
     }
   }
 
@@ -285,7 +284,6 @@ namespace qmcplusplus
               CollectableResultBufferMasterOnly[point] += Weight;
             }
         }
-      app_log() << "!test "<< CollectableResultBufferMasterOnly[0]<<CollectableResultBufferMasterOnly[1]<< std::endl;
     }
     else
     {
