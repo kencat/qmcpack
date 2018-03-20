@@ -406,6 +406,12 @@ void EstimatorManagerBase::accumulate(MCWalkerConfiguration& W
     Collectables->accumulate_all(W.CollectableResultBuffer,1.0);
 }
 
+void EstimatorManagerBase::accumulateCollectables(MCWalkerConfiguration& W)
+{
+  CollectablesMasterOnly->accumulate_all(W.CollectableResultBufferMasterOnly, 1.0);
+  app_log()<<"! test "<< W.CollectableResultBufferMasterOnly[0] << W.CollectableResultBufferMasterOnly[1] << std::endl;
+}
+
 void EstimatorManagerBase::getEnergyAndWeight(RealType& e, RealType& w, RealType& var)
 {
   if(Options[COLLECT])//need to broadcast the value

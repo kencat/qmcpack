@@ -226,6 +226,9 @@ public:
   void accumulate(MCWalkerConfiguration& W, MCWalkerConfiguration::iterator it,
                   MCWalkerConfiguration::iterator it_end);
 
+  //this is a function to deparate accumulate collectables and main estimators. 
+  void accumulateCollectables(MCWalkerConfiguration& W);
+
 //     /** accumulate the FW observables
 //      */
 //     void accumulate(HDF5_FW_observables& OBS, HDF5_FW_weights& WGTS, std::vector<int>& Dims);
