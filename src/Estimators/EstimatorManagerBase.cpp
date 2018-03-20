@@ -304,6 +304,8 @@ void EstimatorManagerBase::aggregateThreadsAndRanks(const std::vector<EstimatorM
       est[tid]->Collectables->deliver_accumulate(AverageCache.begin());
     }
   }
+  //this->CollectablesMasterOnly->getscalarssum();
+  this->CollectablesMasterOnly->deliver_accumulate(AverageCache.begin());
 
   AverageCache *= tnorm;
  /* SquaredAverageCache=est[0]->SquaredAverageCache;
@@ -409,7 +411,6 @@ void EstimatorManagerBase::accumulate(MCWalkerConfiguration& W
 void EstimatorManagerBase::accumulateCollectables(MCWalkerConfiguration& W)
 {
   CollectablesMasterOnly->accumulate_all(W.CollectableResultBufferMasterOnly, 1.0);
-  app_log()<<"! test "<< W.CollectableResultBufferMasterOnly[0] << W.CollectableResultBufferMasterOnly[1] << std::endl;
 }
 
 void EstimatorManagerBase::getEnergyAndWeight(RealType& e, RealType& w, RealType& var)
@@ -522,7 +523,7 @@ bool EstimatorManagerBase::put(MCWalkerConfiguration& W, QMCHamiltonian& H, xmlN
     Collectables=new CollectablesEstimator(H);
   }
   //CollectablesMasterOnly
-  if(CollectablesMasterOnly == 0 && H.sizeOfCollectableResultBufferMasterOnly())
+  if(CollectablesMasterOnly == 0)
   {
     CollectablesMasterOnly = new CollectablesEstimator(H);
   }
