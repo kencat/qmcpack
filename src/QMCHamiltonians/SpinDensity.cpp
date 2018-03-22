@@ -22,7 +22,7 @@ namespace qmcplusplus
 
   SpinDensity::SpinDensity(ParticleSet& P)
   {
-    switchEvaluatefromSampleStacks = false;
+    switchEvaluatefromSampleStacks = true;
     // get particle information
     SpeciesSet& species = P.getSpeciesSet();
     nspecies = species.size();
@@ -199,10 +199,11 @@ namespace qmcplusplus
     {
       CollectableResultBufferMasterOnly.add(tmp.begin(),tmp.end());
     }
-    else
-    {
-      CollectableResultBuffer.add(tmp.begin(),tmp.end());
-    }
+    //else
+    //{
+    //Until now we still need CollectableResultBuffer used by DMC and other DensityEstimators
+    CollectableResultBuffer.add(tmp.begin(),tmp.end());
+    //}
   }
 
   void SpinDensity::registerCollectables(std::vector<observable_helper*>& h5desc, hid_t gid) const 
