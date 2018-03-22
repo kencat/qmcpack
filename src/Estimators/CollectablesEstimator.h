@@ -31,9 +31,6 @@ class CollectablesEstimator: public ScalarEstimatorBase
   const QMCHamiltonian& refH;
 
 public:
-  ///Mark Use CollectablesMasterOnly
-  bool switchCollectablesMasterOnly;
-
   /** constructor
    * @param h QMCHamiltonian to define the components
    */

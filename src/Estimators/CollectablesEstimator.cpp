@@ -24,9 +24,14 @@ namespace qmcplusplus
 CollectablesEstimator::CollectablesEstimator(QMCHamiltonian& h)
   : refH(h)
 {
-  scalars.resize(h.sizeOfCollectableResultBuffer());
-  //scalars_saved.resize(h.sizeOfCollectableResultBuffer());
-  switchCollectablesMasterOnly = ((h.sizeOfCollectableResultBufferMasterOnly() == 0)?false:true);
+  if(h.sizeOfCollectableResultBufferMasterOnly())
+  {
+    scalars.resize(h.sizeOfCollectableResultBufferMasterOnly());
+  }
+  else
+  {
+    scalars.resize(h.sizeOfCollectableResultBuffer());
+  }
 }
 
 void CollectablesEstimator::registerObservables(std::vector<observable_helper*>& h5desc
