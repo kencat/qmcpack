@@ -89,16 +89,6 @@ struct ScalarEstimatorBase
       scalars[i].clear();
      }
    }
-/** print scalars sum */
-  inline void getscalarssum()
-  {
-    auto sum = 0;
-    for(int i=0; i<scalars.size(); i++)
-    {
-      sum += scalars[i].mean();
-    }
-    app_log()<<"!out scalars sum"<<sum<<std::endl;
-   }
 
   /** a virtual function to accumulate observables or collectables
    * @param W const MCWalkerConfiguration
