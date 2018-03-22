@@ -26,6 +26,7 @@ CollectablesEstimator::CollectablesEstimator(QMCHamiltonian& h)
 {
   scalars.resize(h.sizeOfCollectableResultBuffer());
   //scalars_saved.resize(h.sizeOfCollectableResultBuffer());
+  switchCollectablesMasterOnly = ((h.sizeOfCollectableResultBufferMasterOnly() == 0)?false:true);
 }
 
 void CollectablesEstimator::registerObservables(std::vector<observable_helper*>& h5desc
