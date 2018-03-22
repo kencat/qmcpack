@@ -22,7 +22,7 @@ namespace qmcplusplus
 
   SpinDensity::SpinDensity(ParticleSet& P)
   {
-    switchEvaluatefromSampleStacks = true;
+    switchEvaluatefromSampleStacks = false;
     // get particle information
     SpeciesSet& species = P.getSpeciesSet();
     nspecies = species.size();
@@ -182,25 +182,26 @@ namespace qmcplusplus
     app_log()<<pad<<"end SpinDensity report"<< std::endl;
   }
 
-
-  void SpinDensity::addObservables(PropertySetType& plist,
-                                   BufferType& CollectableResultBuffer)
+  void SpinDensity::addObservables(PropertySetType& plist, BufferType& CollectableResultBuffer)
   {
     myIndex=CollectableResultBuffer.current();
     std::vector<RealType> tmp(nspecies*npoints);
     CollectableResultBuffer.add(tmp.begin(),tmp.end());
   }
 
-  void SpinDensity::addObservablesCollectables(PropertySetType& plist,
+  void SpinDensity::addAuxObservables(PropertySetType& plist,
                                    BufferType& CollectableResultBuffer,
                                    BufferType& CollectableResultBufferMasterOnly)
   {
     myIndex=CollectableResultBuffer.current();
     std::vector<RealType> tmp(nspecies*npoints);
-    CollectableResultBuffer.add(tmp.begin(),tmp.end());
     if(switchEvaluatefromSampleStacks)
     {
       CollectableResultBufferMasterOnly.add(tmp.begin(),tmp.end());
+    }
+    else
+    {
+      CollectableResultBuffer.add(tmp.begin(),tmp.end());
     }
   }
 
@@ -230,7 +231,6 @@ namespace qmcplusplus
     if(!switchEvaluatefromSampleStacks)
     {
       RealType w=tWalker->Weight;
-      app_log() << "!weight "<< w << std::endl;
       int p=0;
       int offset = myIndex;
       for(int s=0;s<nspecies;++s,offset+=npoints)
@@ -272,7 +272,6 @@ namespace qmcplusplus
           int p = 0;
           int offset = myIndex;
           RealType Weight = Ws[tid]->getSampleWeight(ns);
-          //app_log() << "!weight "<< Weight << std::endl;
           ParticleSet::ParticlePos_t R = Ws[tid]->getSampleR(ns);
           for(int s=0; s<nspecies; ++s, offset+=npoints)
             for(int ps=0;ps<species_size[s];++ps,++p)

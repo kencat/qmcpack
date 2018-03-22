@@ -229,9 +229,9 @@ struct QMCHamiltonianBase: public QMCTraits
     addValue(plist);
   }
 
-  virtual void addObservablesCollectables(PropertySetType& plist,BufferType& CollectableResultBuffer,BufferType& CollectableResultBufferMasterOnly)
+  virtual void addAuxObservables(PropertySetType& plist,BufferType& CollectableResultBuffer,BufferType& CollectableResultBufferMasterOnly)
   {
-    addValue(plist);
+    this->addObservables(plist, CollectableResultBuffer);
   }
 
   /*** add to observable descriptor for hdf5

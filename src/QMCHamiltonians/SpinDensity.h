@@ -58,7 +58,7 @@ class SpinDensity : public QMCHamiltonianBase
 
   //required for CollectableResultBuffer interface
   void addObservables(PropertySetType& plist,BufferType& CollectableResultBuffer);
-  void addObservablesCollectables(PropertySetType& plist,BufferType& CollectableResultBuffer,BufferType& CollectableResultBufferMasterOnly);
+  void addAuxObservables(PropertySetType& plist,BufferType& CollectableResultBuffer,BufferType& CollectableResultBufferMasterOnly);
   void registerCollectables(std::vector<observable_helper*>& h5desc, hid_t gid) const ;
 
   //should be empty for Collectables interface
