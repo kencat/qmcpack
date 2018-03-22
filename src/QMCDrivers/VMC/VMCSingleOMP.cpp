@@ -112,10 +112,10 @@ bool VMCSingleOMP::run()
       W.resetCollectableResultBufferMasterOnly();
       //only work in Spindensity now
       H.getHamiltonian("SpinDensity")->auxHevaluatefromSampleStacks(W.CollectableResultBufferMasterOnly, wClones);
-      W.CollectableResultBuffer *= 1.0/W.getActiveWalkers();
-      EstimatorAgent->accumulateCollectables(W);
+      //W.CollectableResultBufferMasterOnly *= 1.0/W.getActiveWalkers();until now no use
+      //EstimatorAgent->accumulateCollectables(W);merged in aggregateThreadsAndRanks
     }
-    EstimatorAgent->aggregateThreadsAndRanks(EstimatorAgentClones, acceptRatio());
+    EstimatorAgent->aggregateThreadsAndRanks(W, EstimatorAgentClones, acceptRatio());
 
     CurrentStep+=nSteps;
 

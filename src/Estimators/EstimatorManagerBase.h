@@ -205,7 +205,7 @@ public:
    * @param m list of estimator which has been collecting data independently
    * @param accept to get acceptance rate of this block
    */
-  void aggregateThreadsAndRanks(const std::vector<EstimatorManagerBase*>& m, RealType accept);
+  void aggregateThreadsAndRanks(MCWalkerConfiguration& W, const std::vector<EstimatorManagerBase*>& m, RealType accept);
 
   /** collect Data from SampleStacks before aggregateThreadsAndRanks
    * @param h hamitonian clone
@@ -225,9 +225,6 @@ public:
    */
   void accumulate(MCWalkerConfiguration& W, MCWalkerConfiguration::iterator it,
                   MCWalkerConfiguration::iterator it_end);
-
-  //this is a function to deparate accumulate collectables and main estimators. 
-  void accumulateCollectables(MCWalkerConfiguration& W);
 
 //     /** accumulate the FW observables
 //      */

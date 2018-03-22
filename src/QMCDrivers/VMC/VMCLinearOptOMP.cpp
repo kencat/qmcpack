@@ -113,7 +113,7 @@ bool VMCLinearOptOMP::run()
       Movers[ip]->stopBlock(false);//could be removed
     }//end-of-parallel for
     CurrentStep+=nSteps;
-    EstimatorAgent->aggregateThreadsAndRanks(EstimatorAgentClones, acceptRatio());
+    EstimatorAgent->aggregateThreadsAndRanks(W, EstimatorAgentClones, acceptRatio());
     #pragma omp parallel for
     for (int ip=0; ip<NumThreads; ++ip)
     {

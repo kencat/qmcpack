@@ -285,15 +285,20 @@ void EstimatorManagerBase::stopBlock(RealType accept, bool collectall)
     collectBlockAverages(1);
 }
 
-void EstimatorManagerBase::aggregateThreadsAndRanks(const std::vector<EstimatorManagerBase*>& est, RealType accept)
+void EstimatorManagerBase::aggregateThreadsAndRanks(MCWalkerConfiguration& W, const std::vector<EstimatorManagerBase*>& est, RealType accept)
 {
+  //swith to method collect Buffer to scalar out of threads using CollectablesMasterOnly 
+  if(W.CollectableResultBufferMasterOnly.size())
+  {
+    CollectablesMasterOnly->accumulate_all(W.CollectableResultBufferMasterOnly, 1.0);
+  }
   //normalized it by the thread
   int num_threads=est.size();
   RealType tnorm=1.0/num_threads;
   AverageCache=est[0]->AverageCache;
   //for(int i=1; i<num_threads; i++)
    // AverageCache +=est[i]->AverageCache;
-  app_log()<<"!colletalbles"<<Collectables<<" "<<CollectablesMasterOnly<<std::endl;
+  //collect scalars to accumulate to AverageCache
   for(int tid=0; tid<num_threads; tid++)
   {
     for(int eid=0; eid<Estimators.size(); eid++)
@@ -312,11 +317,6 @@ void EstimatorManagerBase::aggregateThreadsAndRanks(const std::vector<EstimatorM
   }
 
   AverageCache *= tnorm;
- /* SquaredAverageCache=est[0]->SquaredAverageCache;
-  for(int i=1; i<num_threads; i++)
-    SquaredAverageCache +=est[i]->SquaredAverageCache;
-  SquaredAverageCache *= tnorm;
-  */
   // aggregate PropertyCache from all the threads
   PropertyCache=est[0]->PropertyCache;
   for(int i=1; i<num_threads; i++)
@@ -408,15 +408,8 @@ void EstimatorManagerBase::accumulate(MCWalkerConfiguration& W
   RealType norm=1.0/W.getGlobalNumWalkers();
   for(int i=0; i< Estimators.size(); i++)
     Estimators[i]->accumulate(W,it,it_end,norm);
-  if(Collectables && !CollectablesMasterOnly)
+  if(Collectables)
     Collectables->accumulate_all(W.CollectableResultBuffer,1.0);
-}
-
-void EstimatorManagerBase::accumulateCollectables(MCWalkerConfiguration& W)
-{
-  app_log() << "!sizeOfCollectableResultBufferMasterOnly "<<W.CollectableResultBufferMasterOnly.size()<<std::endl;
-  app_log() << "!CollectablesBufferMasterOnly "<<CollectablesMasterOnly<<std::endl;
-  CollectablesMasterOnly->accumulate_all(W.CollectableResultBufferMasterOnly, 1.0);
 }
 
 void EstimatorManagerBase::getEnergyAndWeight(RealType& e, RealType& w, RealType& var)
@@ -523,7 +516,7 @@ bool EstimatorManagerBase::put(MCWalkerConfiguration& W, QMCHamiltonian& H, xmlN
     add(new LocalEnergyEstimator(H,true),MainEstimatorName);
   }
   //Collectables is special and should not be added to Estimators
-  if(Collectables == 0 && (H.sizeOfCollectableResultBuffer() || H.sizeOfCollectableResultBufferMasterOnly()))
+  if(Collectables == 0 && H.sizeOfCollectableResultBuffer())
   {
     app_log() << "  Using CollectablesEstimator for collectables, e.g. sk, gofr, density " << std::endl;
     Collectables=new CollectablesEstimator(H);
