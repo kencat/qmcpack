@@ -293,6 +293,7 @@ void EstimatorManagerBase::aggregateThreadsAndRanks(const std::vector<EstimatorM
   AverageCache=est[0]->AverageCache;
   //for(int i=1; i<num_threads; i++)
    // AverageCache +=est[i]->AverageCache;
+  app_log()<<"!colletalbles"<<Collectables<<" "<<CollectablesMasterOnly<<std::endl;
   for(int tid=0; tid<num_threads; tid++)
   {
     for(int eid=0; eid<Estimators.size(); eid++)
@@ -305,7 +306,10 @@ void EstimatorManagerBase::aggregateThreadsAndRanks(const std::vector<EstimatorM
     }
   }
   //this->CollectablesMasterOnly->getscalarssum();
-  this->CollectablesMasterOnly->deliver_accumulate(AverageCache.begin());
+  if(CollectablesMasterOnly)
+  {
+    this->CollectablesMasterOnly->deliver_accumulate(AverageCache.begin());
+  }
 
   AverageCache *= tnorm;
  /* SquaredAverageCache=est[0]->SquaredAverageCache;
@@ -404,12 +408,14 @@ void EstimatorManagerBase::accumulate(MCWalkerConfiguration& W
   RealType norm=1.0/W.getGlobalNumWalkers();
   for(int i=0; i< Estimators.size(); i++)
     Estimators[i]->accumulate(W,it,it_end,norm);
-  if(Collectables)
+  if(Collectables && !CollectablesMasterOnly)
     Collectables->accumulate_all(W.CollectableResultBuffer,1.0);
 }
 
 void EstimatorManagerBase::accumulateCollectables(MCWalkerConfiguration& W)
 {
+  app_log() << "!sizeOfCollectableResultBufferMasterOnly "<<W.CollectableResultBufferMasterOnly.size()<<std::endl;
+  app_log() << "!CollectablesBufferMasterOnly "<<CollectablesMasterOnly<<std::endl;
   CollectablesMasterOnly->accumulate_all(W.CollectableResultBufferMasterOnly, 1.0);
 }
 
@@ -517,15 +523,15 @@ bool EstimatorManagerBase::put(MCWalkerConfiguration& W, QMCHamiltonian& H, xmlN
     add(new LocalEnergyEstimator(H,true),MainEstimatorName);
   }
   //Collectables is special and should not be added to Estimators
-  if(Collectables == 0 && H.sizeOfCollectableResultBuffer())
+  if(Collectables == 0 && (H.sizeOfCollectableResultBuffer() || H.sizeOfCollectableResultBufferMasterOnly()))
   {
     app_log() << "  Using CollectablesEstimator for collectables, e.g. sk, gofr, density " << std::endl;
     Collectables=new CollectablesEstimator(H);
-  }
-  //CollectablesMasterOnly
-  if(CollectablesMasterOnly == 0)
-  {
-    CollectablesMasterOnly = new CollectablesEstimator(H);
+    //CollectablesMasterOnly
+    if(CollectablesMasterOnly == 0 && H.sizeOfCollectableResultBufferMasterOnly())
+    {
+      CollectablesMasterOnly = new CollectablesEstimator(H);
+    }
   }
   return true;
 }

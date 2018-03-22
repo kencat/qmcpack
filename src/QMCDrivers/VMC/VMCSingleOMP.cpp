@@ -72,6 +72,7 @@ bool VMCSingleOMP::run()
   bool enough_time_for_next_iteration = true;
 
   const bool has_collectables=W.CollectableResultBuffer.size();
+  const bool has_collectablesMasterOnly=W.CollectableResultBufferMasterOnly.size();
   for (int block=0; block<nBlocks; ++block)
   {
     vmc_loop.start();
@@ -105,13 +106,18 @@ bool VMCSingleOMP::run()
       //Movers[ip]->stopBlock(false);
     }//end-of-parallel for
 
-    //Collect the result from Sample Stacks of MCWalkerConfiguration directly out of the thread loop
-    W.resetCollectableResultBufferMasterOnly();
-    H.getHamiltonian("SpinDensity")->auxHevaluatefromSampleStacks(W.CollectableResultBufferMasterOnly, wClones);
-    EstimatorAgent->accumulateCollectables(W);
+    if(has_collectablesMasterOnly)
+    {
+      //Collect the result from Sample Stacks of MCWalkerConfiguration directly out of the thread loop
+      W.resetCollectableResultBufferMasterOnly();
+      //only work in Spindensity now
+      H.getHamiltonian("SpinDensity")->auxHevaluatefromSampleStacks(W.CollectableResultBufferMasterOnly, wClones);
+      W.CollectableResultBuffer *= 1.0/W.getActiveWalkers();
+      EstimatorAgent->accumulateCollectables(W);
+    }
+    EstimatorAgent->aggregateThreadsAndRanks(EstimatorAgentClones, acceptRatio());
 
     CurrentStep+=nSteps;
-    EstimatorAgent->aggregateThreadsAndRanks(EstimatorAgentClones, acceptRatio());
 
 #if !defined(REMOVE_TRACEMANAGER)
     Traces->write_buffers(traceClones, block);
