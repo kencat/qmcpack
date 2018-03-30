@@ -71,8 +71,8 @@ bool VMCSingleOMP::run()
   RunTimeControl runtimeControl(RunTimeManager, MaxCPUSecs);
   bool enough_time_for_next_iteration = true;
 
-  const bool has_collectables=W.CollectableResultBuffer.size();
   const bool has_collectablesMasterOnly=W.CollectableResultBufferMasterOnly.size();
+  const bool has_collectables=W.CollectableResultBuffer.size();
   for (int block=0; block<nBlocks; ++block)
   {
     vmc_loop.start();
@@ -86,22 +86,45 @@ bool VMCSingleOMP::run()
       Movers[ip]->startBlock(nSteps);
       int now_loc=CurrentStep;
       RealType cnorm=1.0/static_cast<RealType>(wPerNode[ip+1]-wPerNode[ip]);
-      for (int step=0; step<nSteps; ++step)
+      if(!has_collectablesMasterOnly)
       {
-        Movers[ip]->set_step(now_loc);
-        //collectables are reset, it is accumulated while advancing walkers
-        wClones[ip]->resetCollectableResultBuffer();
-        bool recompute=(nBlocksBetweenRecompute && (step+1) == nSteps && (1+block)%nBlocksBetweenRecompute == 0 && QMCDriverMode[QMC_UPDATE_MODE] );
-        Movers[ip]->advanceWalkers(wit,wit_end,recompute);
-        if(has_collectables)
-          wClones[ip]->CollectableResultBuffer *= cnorm;
-        Movers[ip]->accumulate(wit,wit_end);
-        ++now_loc;
-        //if (updatePeriod&& now_loc%updatePeriod==0) Movers[ip]->updateWalkers(wit,wit_end);
-        if (Period4WalkerDump&& now_loc%Period4WalkerDump==0)
-          wClones[ip]->saveEnsemble(wit,wit_end);
+        for (int step=0; step<nSteps; ++step)
+        {
+          Movers[ip]->set_step(now_loc);
+          //collectables are reset, it is accumulated while advancing walkers
+          wClones[ip]->resetCollectableResultBuffer();
+          bool recompute=(nBlocksBetweenRecompute && (step+1) == nSteps && (1+block)%nBlocksBetweenRecompute == 0 && QMCDriverMode[QMC_UPDATE_MODE] );
+          Movers[ip]->advanceWalkers(wit,wit_end,recompute);
+          if(has_collectables)
+            wClones[ip]->CollectableResultBuffer *= cnorm;
+          Movers[ip]->accumulate(wit,wit_end);
+          ++now_loc;
+          //if (updatePeriod&& now_loc%updatePeriod==0) Movers[ip]->updateWalkers(wit,wit_end);
+          if (Period4WalkerDump&& now_loc%Period4WalkerDump==0)
+            wClones[ip]->saveEnsemble(wit,wit_end);
 //           if(storeConfigs && (now_loc%storeConfigs == 0))
 //             ForwardWalkingHistory.storeConfigsForForwardWalking(*wClones[ip]);
+        }
+      }
+      else
+      {
+        //app_log()<<"!new "<<ip<<" "<<wClones[ip]->CollectableResultBuffer.clear()<<std::endl;
+        //app_log()<<"!new "<<ip<<" "<<wClones[ip]->CollectableResultBuffer.size()<<std::endl;
+        //app_log()<<"!new22 "<<ip<<" "<<Movers[ip]->Collectables.size()<<std::endl;
+        for (int step=0; step<nSteps; ++step)
+        {
+          Movers[ip]->set_step(now_loc);
+          //collectables are reset, it is accumulated while advancing walkers
+          //wClones[ip]->resetCollectableResultBuffer();
+          bool recompute=(nBlocksBetweenRecompute && (step+1) == nSteps && (1+block)%nBlocksBetweenRecompute == 0 && QMCDriverMode[QMC_UPDATE_MODE] );
+          Movers[ip]->advanceWalkers(wit,wit_end,recompute);
+          //if(has_collectables)
+          //  wClones[ip]->CollectableResultBuffer *= cnorm;
+          //Movers[ip]->accumulate(wit,wit_end);
+          ++now_loc;
+          if (Period4WalkerDump&& now_loc%Period4WalkerDump==0)
+            wClones[ip]->saveEnsemble(wit,wit_end);
+        }
       }
       //Movers[ip]->stopBlock(false);
     }//end-of-parallel for
@@ -156,6 +179,10 @@ bool VMCSingleOMP::run()
 void VMCSingleOMP::resetRun()
 {
   ////only VMC can overwrite this
+  app_log()<<"!buffersize "<< W.CollectableResultBuffer.size()<<std::endl;
+  app_log()<<"!buffersizeMO "<< W.CollectableResultBufferMasterOnly.size()<<std::endl;
+  W.CollectableResultBuffer.clear();
+  app_log()<<"!buffersize "<< W.CollectableResultBuffer.size()<<std::endl;
   if(nTargetPopulation>0)
     branchEngine->iParam[SimpleFixedNodeBranch::B_TARGETWALKERS]=static_cast<int>(std::ceil(nTargetPopulation));
   makeClones(W,Psi,H);
