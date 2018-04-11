@@ -110,17 +110,18 @@ bool VMCSingleOMP::run()
       {
         //app_log()<<"!new "<<ip<<" "<<wClones[ip]->CollectableResultBuffer.clear()<<std::endl;
         //app_log()<<"!new "<<ip<<" "<<wClones[ip]->CollectableResultBuffer.size()<<std::endl;
-        //app_log()<<"!new22 "<<ip<<" "<<Movers[ip]->Collectables.size()<<std::endl;
+        //app_log()<<"!buffersize "<< W.CollectableResultBuffer.size()<<std::endl;
         for (int step=0; step<nSteps; ++step)
         {
           Movers[ip]->set_step(now_loc);
           //collectables are reset, it is accumulated while advancing walkers
           //wClones[ip]->resetCollectableResultBuffer();
+          //wClones[ip]->CollectableResultBuffer.clear();
           bool recompute=(nBlocksBetweenRecompute && (step+1) == nSteps && (1+block)%nBlocksBetweenRecompute == 0 && QMCDriverMode[QMC_UPDATE_MODE] );
           Movers[ip]->advanceWalkers(wit,wit_end,recompute);
           //if(has_collectables)
           //  wClones[ip]->CollectableResultBuffer *= cnorm;
-          //Movers[ip]->accumulate(wit,wit_end);
+          Movers[ip]->accumulateMainEstimators(wit,wit_end);
           ++now_loc;
           if (Period4WalkerDump&& now_loc%Period4WalkerDump==0)
             wClones[ip]->saveEnsemble(wit,wit_end);
@@ -132,7 +133,7 @@ bool VMCSingleOMP::run()
     if(has_collectablesMasterOnly)
     {
       //Collect the result from Sample Stacks of MCWalkerConfiguration directly out of the thread loop
-      W.resetCollectableResultBufferMasterOnly();
+      //W.resetCollectableResultBufferMasterOnly();
       //only work in Spindensity now
       H.getHamiltonian("SpinDensity")->auxHevaluatefromSampleStacks(W.CollectableResultBufferMasterOnly, wClones);
       //W.CollectableResultBufferMasterOnly *= 1.0/W.getActiveWalkers();until now no use
@@ -179,13 +180,15 @@ bool VMCSingleOMP::run()
 void VMCSingleOMP::resetRun()
 {
   ////only VMC can overwrite this
-  app_log()<<"!buffersize "<< W.CollectableResultBuffer.size()<<std::endl;
-  app_log()<<"!buffersizeMO "<< W.CollectableResultBufferMasterOnly.size()<<std::endl;
-  W.CollectableResultBuffer.clear();
-  app_log()<<"!buffersize "<< W.CollectableResultBuffer.size()<<std::endl;
   if(nTargetPopulation>0)
     branchEngine->iParam[SimpleFixedNodeBranch::B_TARGETWALKERS]=static_cast<int>(std::ceil(nTargetPopulation));
+  W.CollectableResultBuffer.clear();
   makeClones(W,Psi,H);
+  #pragma omp parallel for
+  for(int ip=0; ip<NumThreads; ++ip)
+  {
+    wClones[ip]->CollectableResultBuffer.clear();
+  }
   FairDivideLow(W.getActiveWalkers(),NumThreads,wPerNode);
   app_log() << "  Initial partition of walkers ";
   copy(wPerNode.begin(),wPerNode.end(),std::ostream_iterator<int>(app_log()," "));
