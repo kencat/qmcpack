@@ -412,6 +412,15 @@ void EstimatorManagerBase::accumulate(MCWalkerConfiguration& W
     Collectables->accumulate_all(W.CollectableResultBuffer,1.0);
 }
 
+void EstimatorManagerBase::accumulateMainEstimators(MCWalkerConfiguration& W
+                                  , MCWalkerConfiguration::iterator it, MCWalkerConfiguration::iterator it_end)
+{
+  BlockWeight += it_end-it;
+  RealType norm=1.0/W.getGlobalNumWalkers();
+  for(int i=0; i< Estimators.size(); i++)
+    Estimators[i]->accumulate(W,it,it_end,norm);
+}
+
 void EstimatorManagerBase::getEnergyAndWeight(RealType& e, RealType& w, RealType& var)
 {
   if(Options[COLLECT])//need to broadcast the value

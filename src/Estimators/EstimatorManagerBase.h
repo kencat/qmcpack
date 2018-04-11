@@ -226,6 +226,10 @@ public:
   void accumulate(MCWalkerConfiguration& W, MCWalkerConfiguration::iterator it,
                   MCWalkerConfiguration::iterator it_end);
 
+  /** accumulate the measurements for a subset of walkers [it,it_end) Only in Main Estimators*/
+  void accumulateMainEstimators(MCWalkerConfiguration& W, MCWalkerConfiguration::iterator it,
+                  MCWalkerConfiguration::iterator it_end);
+
 //     /** accumulate the FW observables
 //      */
 //     void accumulate(HDF5_FW_observables& OBS, HDF5_FW_weights& WGTS, std::vector<int>& Dims);

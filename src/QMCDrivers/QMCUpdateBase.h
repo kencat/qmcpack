@@ -194,6 +194,11 @@ public:
     EstimatorAgent->accumulate(W,it,it_end);
   }
 
+  inline void accumulateMainEstimators(WalkerIter_t it, WalkerIter_t it_end)
+  {
+    EstimatorAgent->accumulateMainEstimators(W,it,it_end);
+  }
+
   /** advance walkers executed at each step
    *
    * Derived classes implement how to move walkers and accept/reject
