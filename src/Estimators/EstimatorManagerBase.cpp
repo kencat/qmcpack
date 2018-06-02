@@ -287,7 +287,7 @@ void EstimatorManagerBase::stopBlock(RealType accept, bool collectall)
 
 void EstimatorManagerBase::aggregateThreadsAndRanks(MCWalkerConfiguration& W, const std::vector<EstimatorManagerBase*>& est, RealType accept)
 {
-  //swith to method collect Buffer to scalar out of threads using CollectablesMasterOnly 
+  //swith to method collect Buffer to scalar out of threads using CollectablesMasterOnly
   if(W.CollectableResultBufferMasterOnly.size())
   {
     CollectablesMasterOnly->accumulate_all(W.CollectableResultBufferMasterOnly, 1.0);
@@ -533,6 +533,7 @@ bool EstimatorManagerBase::put(MCWalkerConfiguration& W, QMCHamiltonian& H, xmlN
     if(CollectablesMasterOnly == 0 && H.sizeOfCollectableResultBufferMasterOnly())
     {
       CollectablesMasterOnly = new CollectablesEstimator(H);
+      app_log() << "  Using CollectablesEstimator Only for Master Thread " << std::endl;
     }
   }
   return true;
