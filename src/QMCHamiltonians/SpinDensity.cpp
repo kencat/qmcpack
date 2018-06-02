@@ -202,7 +202,8 @@ namespace qmcplusplus
     //else
     //{
     //Until now we still need CollectableResultBuffer used by DMC and other DensityEstimators
-    CollectableResultBuffer.add(tmp.begin(),tmp.end());
+      //CollectableResultBuffer.add(tmp.begin(),tmp.end());
+      CollectableResultBuffer.add(tmp.begin(),tmp.begin()+1);
     //}
   }
 
