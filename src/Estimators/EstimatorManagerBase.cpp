@@ -290,7 +290,7 @@ void EstimatorManagerBase::aggregateThreadsAndRanks(MCWalkerConfiguration& W, co
   //swith to method collect Buffer to scalar out of threads using CollectablesMasterOnly
   if(W.CollectableResultBufferMasterOnly.size())
   {
-    CollectablesMasterOnly->accumulate_all(W.CollectableResultBufferMasterOnly, 1.0);
+    this->CollectablesMasterOnly->accumulate_all(W.CollectableResultBufferMasterOnly, 1.0);
   }
   //normalized it by the thread
   int num_threads=est.size();

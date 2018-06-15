@@ -198,13 +198,13 @@ namespace qmcplusplus
     if(switchEvaluatefromSampleStacks)
     {
       CollectableResultBufferMasterOnly.add(tmp.begin(),tmp.end());
-    }
-    //else
-    //{
-    //Until now we still need CollectableResultBuffer used by DMC and other DensityEstimators
-      //CollectableResultBuffer.add(tmp.begin(),tmp.end());
       CollectableResultBuffer.add(tmp.begin(),tmp.begin()+1);
-    //}
+    }
+    else
+    {
+    //Until now we still need CollectableResultBuffer used by DMC and other DensityEstimators
+      CollectableResultBuffer.add(tmp.begin(),tmp.end());
+    }
   }
 
   void SpinDensity::registerCollectables(std::vector<observable_helper*>& h5desc, hid_t gid) const 
