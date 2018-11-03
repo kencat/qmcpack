@@ -21,7 +21,6 @@
 #include "QMCDrivers/QMCCostFunctionOMP.h"
 #include "Particle/MCWalkerConfiguration.h"
 #include "QMCWaveFunctions/TrialWaveFunction.h"
-#include "Particle/HDFWalkerInputCollect.h"
 #include "Message/CommOperators.h"
 //#define QMCCOSTFUNCTION_DEBUG
 
@@ -30,8 +29,8 @@ namespace qmcplusplus
 {
 
 QMCCostFunctionOMP::QMCCostFunctionOMP(MCWalkerConfiguration& w,
-                                       TrialWaveFunction& psi, QMCHamiltonian& h, HamiltonianPool& hpool):
-  QMCCostFunctionBase(w,psi,h), CloneManager(hpool)
+                                       TrialWaveFunction& psi, QMCHamiltonian& h):
+  QMCCostFunctionBase(w,psi,h)
 {
   CSWeight=1.0;
   app_log()<<" Using QMCCostFunctionOMP::QMCCostFunctionOMP"<< std::endl;
@@ -282,9 +281,14 @@ void QMCCostFunctionOMP::checkConfigurations()
     Return_t e2=0.0;
     for (int iw=0, iwg=wPerNode[ip]; iw<wRef.numSamples(); ++iw,++iwg)
     {
+<<<<<<< HEAD
       wRef.R=wRef.getSampleR(iw);
       wRef.update(true);
       wRef.donePbyP();
+=======
+      wRef.loadSample(wRef.R, iw);
+      wRef.update();
+>>>>>>> upstream/master
       Return_t* restrict saved=(*RecordsOnNode[ip])[iw];
       psiClones[ip]->evaluateDeltaLog(wRef, saved[LOGPSI_FIXED], saved[LOGPSI_FREE], *dLogPsi[iwg], *d2LogPsi[iwg]);
       saved[REWEIGHT]=1.0;
@@ -386,9 +390,14 @@ void QMCCostFunctionOMP::engine_checkConfigurations(cqmc::engine::LMYEngine * En
     Return_t e2=0.0;
     for (int iw=0, iwg=wPerNode[ip]; iw<wRef.numSamples(); ++iw,++iwg)
     {
+<<<<<<< HEAD
       wRef.R=wRef.getSampleR(iw);
       wRef.update(true);
       wRef.donePbyP();
+=======
+      wRef.loadSample(wRef.R, iw);
+      wRef.update();
+>>>>>>> upstream/master
       Return_t* restrict saved=(*RecordsOnNode[ip])[iw];
       psiClones[ip]->evaluateDeltaLog(wRef, saved[LOGPSI_FIXED], saved[LOGPSI_FREE], *dLogPsi[iwg], *d2LogPsi[iwg]);
       saved[REWEIGHT]=1.0;
@@ -520,7 +529,6 @@ QMCCostFunctionOMP::Return_t QMCCostFunctionOMP::correlatedSampling(bool needGra
     {
       wRef.R=wRef.getSampleR(iw);
       wRef.update(true);
-      if(nlpp) wRef.donePbyP(true);
       Return_t* restrict saved = (*RecordsOnNode[ip])[iw];
       Return_t logpsi;
       logpsi=psiClones[ip]->evaluateDeltaLog(wRef,compute_all_from_scratch);

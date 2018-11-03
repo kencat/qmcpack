@@ -39,8 +39,8 @@ namespace qmcplusplus
 
 /// Constructor.
 CSVMC::CSVMC(MCWalkerConfiguration& w, TrialWaveFunction& psi, QMCHamiltonian& h, 
-                           HamiltonianPool& hpool, WaveFunctionPool& ppool):
-  QMCDriver(w,psi,h,ppool), CloneManager(hpool), multiEstimator(0), Mover(0), UseDrift("yes")
+             WaveFunctionPool& ppool):
+  QMCDriver(w,psi,h,ppool), multiEstimator(0), Mover(0), UseDrift("yes")
 {
   RootName = "csvmc";
   QMCType ="CSVMC";
@@ -237,8 +237,12 @@ void CSVMC::resetRun()
   if(Movers.empty())
   {
 	CSMovers.resize(NumThreads,0);
+<<<<<<< HEAD
     branchClones.resize(NumThreads,0);
     EstimatorAgentClones.resize(NumThreads,0);
+=======
+    estimatorClones.resize(NumThreads,0);
+>>>>>>> upstream/master
     traceClones.resize(NumThreads,0);
     Rng.resize(NumThreads,0);
  
@@ -255,8 +259,6 @@ void CSVMC::resetRun()
 #endif
       Rng[ip]=new RandomGenerator_t(*(RandomNumberControl::Children[ip]));
 	  
-     
-      branchClones[ip] = new BranchEngineType(*branchEngine);
       if(QMCDriverMode[QMC_UPDATE_MODE])
       {
         if (UseDrift == "yes")
@@ -288,7 +290,11 @@ void CSVMC::resetRun()
         app_log() << os.str() << std::endl;
 
       CSMovers[ip]->put(qmcNode);
+<<<<<<< HEAD
       CSMovers[ip]->resetRun( branchClones[ip], EstimatorAgentClones[ip],traceClones[ip]);
+=======
+      CSMovers[ip]->resetRun(branchEngine, estimatorClones[ip],traceClones[ip]);
+>>>>>>> upstream/master
     }
 
   }
@@ -314,7 +320,11 @@ void CSVMC::resetRun()
   {
     //int ip=omp_get_thread_num();
     CSMovers[ip]->put(qmcNode);
+<<<<<<< HEAD
     CSMovers[ip]->resetRun(branchClones[ip],EstimatorAgentClones[ip],traceClones[ip]);
+=======
+    CSMovers[ip]->resetRun(branchEngine,estimatorClones[ip],traceClones[ip]);
+>>>>>>> upstream/master
     if (QMCDriverMode[QMC_UPDATE_MODE])
      CSMovers[ip]->initCSWalkersForPbyP(W.begin()+wPerNode[ip],W.begin()+wPerNode[ip+1], nWarmupSteps>0);
     else

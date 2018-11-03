@@ -43,8 +43,8 @@ namespace qmcplusplus
 {
 
 /// Constructor.
-DMCOMP::DMCOMP(MCWalkerConfiguration& w, TrialWaveFunction& psi, QMCHamiltonian& h, HamiltonianPool& hpool,WaveFunctionPool& ppool)
-  : QMCDriver(w,psi,h,ppool), CloneManager(hpool)
+DMCOMP::DMCOMP(MCWalkerConfiguration& w, TrialWaveFunction& psi, QMCHamiltonian& h, WaveFunctionPool& ppool)
+  : QMCDriver(w,psi,h,ppool)
   , KillNodeCrossing(0) ,Reconfiguration("no"), BenchMarkRun("no")
   , BranchInterval(-1),mover_MaxAge(-1)
 {
@@ -84,11 +84,17 @@ void DMCOMP::resetComponents(xmlNodePtr cur)
   for(int ip=0; ip<NumThreads; ++ip)
   {
     delete Movers[ip];
+<<<<<<< HEAD
     delete EstimatorAgentClones[ip];
     delete branchClones[ip];
     EstimatorAgentClones[ip]= new EstimatorManagerBase(*EstimatorAgent);
     EstimatorAgentClones[ip]->setCollectionMode(false);
     branchClones[ip] = new BranchEngineType(*branchEngine);
+=======
+    delete estimatorClones[ip];
+    estimatorClones[ip]= new EstimatorManagerBase(*Estimators);
+    estimatorClones[ip]->setCollectionMode(false);
+>>>>>>> upstream/master
 #if !defined(REMOVE_TRACEMANAGER)
     delete traceClones[ip];
     traceClones[ip] = Traces->makeClone();
@@ -101,7 +107,11 @@ void DMCOMP::resetComponents(xmlNodePtr cur)
     {
       Movers[ip] = new DMCUpdatePbyPWithRejectionFast(*wClones[ip],*psiClones[ip],*hClones[ip],*Rng[ip]);
       Movers[ip]->put(cur);
+<<<<<<< HEAD
       Movers[ip]->resetRun(branchClones[ip],EstimatorAgentClones[ip],traceClones[ip]);
+=======
+      Movers[ip]->resetRun(branchEngine,estimatorClones[ip],traceClones[ip]);
+>>>>>>> upstream/master
       Movers[ip]->initWalkersForPbyP(W.begin()+wPerNode[ip],W.begin()+wPerNode[ip+1]);
     }
     else
@@ -111,7 +121,11 @@ void DMCOMP::resetComponents(xmlNodePtr cur)
       else
         Movers[ip] = new DMCUpdateAllWithRejection(*wClones[ip],*psiClones[ip],*hClones[ip],*Rng[ip]);
       Movers[ip]->put(cur);
+<<<<<<< HEAD
       Movers[ip]->resetRun(branchClones[ip],EstimatorAgentClones[ip],traceClones[ip]);
+=======
+      Movers[ip]->resetRun(branchEngine,estimatorClones[ip],traceClones[ip]);
+>>>>>>> upstream/master
       Movers[ip]->initWalkers(W.begin()+wPerNode[ip],W.begin()+wPerNode[ip+1]);
     }
   }
@@ -136,7 +150,6 @@ void DMCOMP::resetUpdateEngines()
     }
     //if(QMCDriverMode[QMC_UPDATE_MODE]) W.clearAuxDataSet();
     Movers.resize(NumThreads,0);
-    branchClones.resize(NumThreads,0);
     Rng.resize(NumThreads,0);
     EstimatorAgentClones.resize(NumThreads,0);
     traceClones.resize(NumThreads,0);
@@ -165,14 +178,21 @@ void DMCOMP::resetUpdateEngines()
 #if !defined(REMOVE_TRACEMANAGER)
       traceClones[ip] = Traces->makeClone();
 #endif
+#ifdef USE_FAKE_RNG
+      Rng[ip] = new FakeRandom();
+#else
       Rng[ip]=new RandomGenerator_t(*RandomNumberControl::Children[ip]);
       hClones[ip]->setRandomGenerator(Rng[ip]);
-      branchClones[ip] = new BranchEngineType(*branchEngine);
+#endif
       if(QMCDriverMode[QMC_UPDATE_MODE])
       {
         Movers[ip] = new DMCUpdatePbyPWithRejectionFast(*wClones[ip],*psiClones[ip],*hClones[ip],*Rng[ip]);
         Movers[ip]->put(qmcNode);
+<<<<<<< HEAD
         Movers[ip]->resetRun(branchClones[ip],EstimatorAgentClones[ip],traceClones[ip]);
+=======
+        Movers[ip]->resetRun(branchEngine,estimatorClones[ip],traceClones[ip]);
+>>>>>>> upstream/master
         Movers[ip]->initWalkersForPbyP(W.begin()+wPerNode[ip],W.begin()+wPerNode[ip+1]);
       }
       else
@@ -182,7 +202,11 @@ void DMCOMP::resetUpdateEngines()
         else
           Movers[ip] = new DMCUpdateAllWithRejection(*wClones[ip],*psiClones[ip],*hClones[ip],*Rng[ip]);
         Movers[ip]->put(qmcNode);
+<<<<<<< HEAD
         Movers[ip]->resetRun(branchClones[ip],EstimatorAgentClones[ip],traceClones[ip]);
+=======
+        Movers[ip]->resetRun(branchEngine,estimatorClones[ip],traceClones[ip]);
+>>>>>>> upstream/master
         Movers[ip]->initWalkers(W.begin()+wPerNode[ip],W.begin()+wPerNode[ip+1]);
       }
     }
@@ -278,6 +302,7 @@ bool DMCOMP::run()
         int now=CurrentStep;
         Movers[ip]->set_step(sample);
         bool recompute=( step+1 == nSteps && nBlocksBetweenRecompute && (1+block)%nBlocksBetweenRecompute == 0 && QMCDriverMode[QMC_UPDATE_MODE] );
+<<<<<<< HEAD
 #if 0
         MCWalkerConfiguration::iterator
         wit(W.begin()+wPerNode[ip]), wit_end(W.begin()+wPerNode[ip+1]);
@@ -290,13 +315,15 @@ bool DMCOMP::run()
           Movers[ip]->updateWalkers(wit, wit_end);
 #endif
         wClones[ip]->resetCollectableResultBuffer();
+=======
+        wClones[ip]->resetCollectables();
+>>>>>>> upstream/master
         const size_t nw=W.getActiveWalkers();
 #pragma omp for nowait
         for(size_t iw=0;iw<nw; ++iw)
         {
           Walker_t& thisWalker(*W[iw]);
           Movers[ip]->advanceWalker(thisWalker,recompute);
-          //Movers[ip]->setMultiplicity(thisWalker);
         }
       }
 
@@ -310,7 +337,7 @@ bool DMCOMP::run()
         for(int ip=1; ip<NumThreads; ++ip)
           W.CollectableResultBuffer += wClones[ip]->CollectableResultBuffer;
       }
-      branchEngine->branch(CurrentStep, W, branchClones);
+      branchEngine->branch(CurrentStep, W);
       //         if(storeConfigs && (CurrentStep%storeConfigs == 0)) {
       //           ForwardWalkingHistory.storeConfigsForForwardWalking(W);
       //           W.resetWalkerParents();
@@ -328,8 +355,10 @@ bool DMCOMP::run()
     block++;
     if(DumpConfig &&block%Period4CheckPoint == 0)
     {
+#ifndef USE_FAKE_RNG
       for(int ip=0; ip<NumThreads; ip++)
         *(RandomNumberControl::Children[ip])=*(Rng[ip]);
+#endif
     }
     recordBlock(block);
     dmc_loop.stop();
@@ -346,9 +375,15 @@ bool DMCOMP::run()
   prof.pop(); //close loop
 
   //for(int ip=0; ip<NumThreads; ip++) Movers[ip]->stopRun();
+#ifndef USE_FAKE_RNG
   for(int ip=0; ip<NumThreads; ip++)
     *(RandomNumberControl::Children[ip])=*(Rng[ip]);
+<<<<<<< HEAD
   EstimatorAgent->stop();
+=======
+#endif
+  Estimators->stop();
+>>>>>>> upstream/master
   for (int ip=0; ip<NumThreads; ++ip)
     Movers[ip]->stopRun2();
 #if !defined(REMOVE_TRACEMANAGER)
