@@ -618,7 +618,7 @@ namespace qmcplusplus {
     buf.get(PhaseValue);
   }
 
-  FDLRWfn::ValueType FDLRWfn::ratio(ParticleSet& P, int iat)
+  FDLRWfn::ValueType FDLRWfn::LogRatio(ParticleSet& P, int iat)
   {
     FDLRWfn::RealType logpsi_plus = m_wfn_xpd->getLogPsi();
     FDLRWfn::RealType logpsi_minus = m_wfn_xmd->getLogPsi();
@@ -639,7 +639,7 @@ namespace qmcplusplus {
     // This can be arranged to the following:
     curRatio = scaling_fac_1 * rat_plus - scaling_fac_2 * rat_minus;
 
-    return curRatio;
+    return std::log(curRatio);
   }
 
   ///////////////////////////////////////////////////////////////////////////////////////////////

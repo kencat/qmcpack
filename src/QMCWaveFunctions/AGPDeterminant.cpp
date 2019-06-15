@@ -254,8 +254,10 @@ void AGPDeterminant::copyFromBuffer(ParticleSet& P, WFBufferType& buf)
  * @param P current configuration
  * @param iat the particle thas is being moved
  */
+
+//return log value of ratio
 AGPDeterminant::ValueType
-AGPDeterminant::ratio(ParticleSet& P, int iat)
+AGPDeterminant::LogRatio(ParticleSet& P, int iat)
 {
   UpdateMode=ORB_PBYP_RATIO;
   //GeminalBasis->evaluate(P,iat);
@@ -284,7 +286,7 @@ AGPDeterminant::ratio(ParticleSet& P, int iat)
     //curRatio=DetRatioTranspose(psiM, psiD.data(),iat-Nup);
     curRatio=DetRatioByColumn(psiM, psiD,iat-Nup);
   }
-  return curRatio;
+  return std::log(curRatio);
 }
 
 void AGPDeterminant::ratioUp(ParticleSet& P, int iat)

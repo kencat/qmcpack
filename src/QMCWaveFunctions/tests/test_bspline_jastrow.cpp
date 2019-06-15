@@ -228,7 +228,7 @@ TEST_CASE("BSpline builder Jastrow J2", "[wavefunction]")
   REQUIRE(ratios[1] == ComplexApprox(0.9871985577).compare_real_only());
 
   elec_.makeMove(0, newpos - elec_.R[0]);
-  ValueType ratio_0 = j2->ratio(elec_, 0);
+  ValueType ratio_0 = std::exp(j2->LogRatio(elec_, 0));
   elec_.rejectMove(0);
 
   REQUIRE(ratio_0 == ComplexApprox(0.9522052017).compare_real_only());
@@ -245,7 +245,7 @@ TEST_CASE("BSpline builder Jastrow J2", "[wavefunction]")
 
   //test acceptMove
   elec_.makeMove(1, newpos - elec_.R[1]);
-  ValueType ratio_1 = j2->ratio(elec_, 1);
+  ValueType ratio_1 = std::exp(j2->LogRatio(elec_, 1));
   j2->acceptMove(elec_, 1);
   elec_.acceptMove(1);
 
@@ -481,14 +481,14 @@ TEST_CASE("BSpline builder Jastrow J1", "[wavefunction]")
   REQUIRE(ratios[1] == ComplexApprox(1.0040884258).compare_real_only());
 
   elec_.makeMove(0, newpos - elec_.R[0]);
-  ValueType ratio_0 = j1->ratio(elec_, 0);
+  ValueType ratio_0 = std::exp(j1->LogRatio(elec_, 0));
   elec_.rejectMove(0);
 
   REQUIRE(ratio_0 == ComplexApprox(0.9819208747).compare_real_only());
 
   // test acceptMove results
   elec_.makeMove(1, newpos - elec_.R[1]);
-  ValueType ratio_1 = j1->ratio(elec_, 1);
+  ValueType ratio_1 = std::exp(j1->LogRatio(elec_, 1));
   j1->acceptMove(elec_, 1);
   elec_.acceptMove(1);
 

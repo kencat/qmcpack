@@ -314,11 +314,13 @@ struct WaveFunctionComponent: public QMCTraits
   /** evalaute the ratio of the new to old orbital value
    *@param P the active ParticleSet
    *@param iat the index of a particle
-   *@return \f$ \psi( \{ {\bf R}^{'} \} )/ \psi( \{ {\bf R}^{'}\})\f$
+   *@return Log(\f$ \psi( \{ {\bf R}^{'} \} )/ \psi( \{ {\bf R}^{'}\})\f)$
+   * return the log of ratio, because the intermediate 
+   * ratios can overflow
    *
    *Specialized for particle-by-particle move.
    */
-  virtual ValueType ratio(ParticleSet& P, int iat) =0;
+  virtual ValueType LogRatio(ParticleSet& P, int iat) =0;
 
   /** For particle-by-particle move. Requests space in the buffer
    *  based on the data type sizes of the objects in this class.

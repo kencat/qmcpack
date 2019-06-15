@@ -416,7 +416,7 @@ WaveFunctionComponent::ValueType SlaterDetOpt::ratioGrad(ParticleSet& P, int iat
 /// \return  ???
 ///
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-WaveFunctionComponent::ValueType SlaterDetOpt::ratio(ParticleSet& P, int iat)
+WaveFunctionComponent::ValueType SlaterDetOpt::LogRatio(ParticleSet& P, int iat)
 {
   //  throw std::runtime_error("SlaterDetOpt::ratio(P, iat) not implemented");
   //  return 0.0;
@@ -429,7 +429,7 @@ WaveFunctionComponent::ValueType SlaterDetOpt::ratio(ParticleSet& P, int iat)
 
   // compute the ratio of new to old determinant values
   curRatio = simd::dot(m_orb_inv_mat[iat - m_first], m_orb_val_vec.data(), m_nel);
-  return curRatio;
+  return std::log(curRatio);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////

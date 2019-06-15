@@ -214,6 +214,7 @@ public:
 
   /** functions to handle particle-by-particle update */
   RealType ratio(ParticleSet& P, int iat);
+  RealType LogRatio(ParticleSet& P, int iat);
   ValueType full_ratio(ParticleSet& P, int iat);
 
   /** compulte multiple ratios to handle non-local moves and other virtual moves

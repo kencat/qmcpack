@@ -56,10 +56,11 @@ public:
 
   virtual void restore(int iat) {}
 
-  virtual ValueType ratio(ParticleSet& P, int iat)
+  virtual ValueType LogRatio(ParticleSet& P, int iat)
   {
     return 1.0;
   }
+
 
   virtual GradType evalGrad(ParticleSet &P, int iat)
   {

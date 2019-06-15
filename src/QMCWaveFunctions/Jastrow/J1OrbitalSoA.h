@@ -124,11 +124,11 @@ struct J1OrbitalSoA : public WaveFunctionComponent
     return LogValue;
   }
 
-  ValueType ratio(ParticleSet& P, int iat)
+  ValueType LogRatio(ParticleSet& P, int iat)
   {
     UpdateMode = ORB_PBYP_RATIO;
     curAt      = computeU(P.DistTables[myTableID]->Temp_r.data());
-    return std::exp(Vat[iat] - curAt);
+    return Vat[iat] - curAt;
   }
 
   inline void evaluateRatios(VirtualParticleSet& VP, std::vector<ValueType>& ratios)

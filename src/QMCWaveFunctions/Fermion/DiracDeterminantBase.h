@@ -118,7 +118,7 @@ public:
   using WaveFunctionComponent::acceptMove;
   using WaveFunctionComponent::completeUpdates;
   using WaveFunctionComponent::evalGrad;
-  using WaveFunctionComponent::ratio;
+  using WaveFunctionComponent::LogRatio;
   using WaveFunctionComponent::ratioGrad;
   using WaveFunctionComponent::restore;
 

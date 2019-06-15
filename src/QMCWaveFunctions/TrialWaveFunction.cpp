@@ -300,13 +300,18 @@ void TrialWaveFunction::evaluateHessian(ParticleSet & P, HessVector_t& grad_grad
 
 TrialWaveFunction::RealType TrialWaveFunction::ratio(ParticleSet& P,int iat)
 {
+  return std::exp(LogRatio(P,iat));
+}
+
+TrialWaveFunction::RealType TrialWaveFunction::LogRatio(ParticleSet& P,int iat)
+{
   ValueType r(1.0);
   std::vector<WaveFunctionComponent*>::iterator it(Z.begin());
   std::vector<WaveFunctionComponent*>::iterator it_end(Z.end());
   for (int ii=V_TIMER; it!=it_end; ++it,ii+=TIMER_SKIP)
   {
     myTimers[ii]->start();
-    r *= (*it)->ratio(P,iat);
+    r *= (*it)->LogRatio(P,iat);
     myTimers[ii]->stop();
   }
 #if defined(QMC_COMPLEX)
@@ -325,7 +330,7 @@ TrialWaveFunction::ValueType TrialWaveFunction::full_ratio(ParticleSet& P,int ia
 {
   ValueType r(1.0);
   for(size_t i=0,n=Z.size(); i<n; ++i)
-    r *= Z[i]->ratio(P,iat);
+    r *= std::exp(Z[i]->LogRatio(P,iat));
   return r;
 }
 

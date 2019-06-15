@@ -188,7 +188,7 @@ namespace qmcplusplus {
 
     void copyFromBuffer(ParticleSet& P, WFBufferType& buf);
 
-    ValueType ratio(ParticleSet& P, int iat);
+    ValueType LogRatio(ParticleSet& P, int iat);
 
     void acceptMove(ParticleSet& P, int iat);
 

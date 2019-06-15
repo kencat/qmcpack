@@ -144,7 +144,7 @@ LRTwoBodyJastrow::RealType LRTwoBodyJastrow::evaluateLog(ParticleSet& P,
 /* evaluate the ratio with P.R[iat]
  *
  */
-LRTwoBodyJastrow::ValueType LRTwoBodyJastrow::ratio(ParticleSet& P, int iat)
+LRTwoBodyJastrow::ValueType LRTwoBodyJastrow::LogRatio(ParticleSet& P, int iat)
 {
   //restore, if called should do nothing
   NeedToRestore = false;
@@ -192,7 +192,7 @@ LRTwoBodyJastrow::ValueType LRTwoBodyJastrow::ratio(ParticleSet& P, int iat)
     curVal += Fk_symm[ks] * dd;
   }
 #endif
-  return std::exp(curVal - U[iat]);
+  return curVal - U[iat];
 }
 
 

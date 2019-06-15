@@ -408,7 +408,7 @@ public:
     return LogValue;
   }
 
-  ValueType ratio(ParticleSet& P, int iat)
+  ValueType LogRatio(ParticleSet& P, int iat)
   {
     UpdateMode = ORB_PBYP_RATIO;
 
@@ -416,7 +416,7 @@ public:
     const DistanceTableData& ee_table = (*P.DistTables[0]);
     cur_Uat = computeU(P, iat, P.GroupID[iat], eI_table.Temp_r.data(), ee_table.Temp_r.data(), ions_nearby_new);
     DiffVal = Uat[iat] - cur_Uat;
-    return std::exp(DiffVal);
+    return DiffVal;
   }
 
   void evaluateRatios(VirtualParticleSet& VP, std::vector<ValueType>& ratios)

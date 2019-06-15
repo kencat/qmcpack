@@ -45,7 +45,7 @@ public:
 
   virtual void restore(int iat) override {}
 
-  virtual ValueType ratio(ParticleSet& P, int iat) override
+  virtual ValueType LogRatio(ParticleSet& P, int iat) override
   {
     return 1.0;
   }

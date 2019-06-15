@@ -158,7 +158,7 @@ public:
     Fk_0 = Fk;
   }
 
-  ValueType ratio(ParticleSet& P, int iat);
+  ValueType LogRatio(ParticleSet& P, int iat);
 
   ValueType ratioGrad(ParticleSet& P, int iat, GradType& g);
 

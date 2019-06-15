@@ -322,7 +322,7 @@ public:
     }
   }
 
-  ValueType ratio(ParticleSet& P, int iat)
+  ValueType LogRatio(ParticleSet& P, int iat)
   {
     const DistanceTableData* d_table = P.DistTables[0];
     DiffVal                          = 0.0;
@@ -340,7 +340,7 @@ public:
         //DiffVal += U[ij]-F[pairid[jat]]->evaluate(d_table->Temp[jat].r1);
       }
     }
-    return std::exp(DiffVal);
+    return DiffVal;
   }
 
   inline void evaluateRatios(VirtualParticleSet& VP, std::vector<ValueType>& ratios)

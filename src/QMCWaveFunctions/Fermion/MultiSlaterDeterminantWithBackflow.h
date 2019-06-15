@@ -64,7 +64,7 @@ public:
 
   GradType evalGrad(ParticleSet& P, int iat);
   ValueType ratioGrad(ParticleSet& P, int iat, GradType& grad_iat);
-  ValueType ratio(ParticleSet& P, int iat);
+  ValueType LogRatio(ParticleSet& P, int iat);
   void acceptMove(ParticleSet& P, int iat);
   void restore(int iat);
 

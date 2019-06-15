@@ -89,7 +89,7 @@ public:
    * @param P current configuration
    * @param iat the particle thas is being moved
    */
-  ValueType ratio(ParticleSet& P, int iat);
+  ValueType LogRatio(ParticleSet& P, int iat);
 
   /** compute multiple ratios for a particle move
    */

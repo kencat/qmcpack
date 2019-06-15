@@ -93,7 +93,7 @@ IonOrbital::evaluateLog(ParticleSet& P,
  * @param iat particle that has been moved.
  */
 ValueType
-IonOrbital::ratio(ParticleSet& P, int iat)
+IonOrbital::LogRatio(ParticleSet& P, int iat)
 {
   const auto &d_table=P.DistTables[myTableID];
   int icent = ParticleCenter[iat];
@@ -102,9 +102,8 @@ IonOrbital::ratio(ParticleSet& P, int iat)
   int index = d_table->M[icent] + iat;
   RealType newdist = d_table->Temp[icent].r1;
   curVal = ParticleAlpha[iat]*(newdist*newdist);
-  return std::exp(U[iat] - curVal);
+  return U[iat] - curVal;
 }
-
 
 GradType
 IonOrbital::evalGrad(ParticleSet& P, int iat)
