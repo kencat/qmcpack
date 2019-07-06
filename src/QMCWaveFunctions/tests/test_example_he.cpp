@@ -129,7 +129,7 @@ TEST_CASE("ExampleHe", "[wavefunction]")
   elec->makeMove(iat, zero_displ);
 
 
-  ValueType ratio = example_he->ratio(*elec, iat);
+  ValueType ratio = std::exp(example_he->evalLogRatio(*elec, iat));
   REQUIRE(ratio == ComplexApprox(1.0));
 
   ratio = example_he->ratioGrad(*elec, iat, grad0);
@@ -142,7 +142,7 @@ TEST_CASE("ExampleHe", "[wavefunction]")
 
   iat = 1;
   elec->makeMove(iat, zero_displ);
-  ratio = example_he->ratio(*elec, iat);
+  ratio = std::exp(example_he->evalLogRatio(*elec, iat));
   REQUIRE(ratio == ComplexApprox(1.0));
 
 
@@ -172,7 +172,7 @@ TEST_CASE("ExampleHe", "[wavefunction]")
   iat = 0;
   elec->makeMove(iat, displ);
 
-  ratio = example_he->ratio(*elec, iat);
+  ratio = std::exp(example_he->evalLogRatio(*elec, iat));
   REQUIRE(ratio == ComplexApprox(std::exp(new_logpsi - logpsi)));
 
   ratio = example_he->ratioGrad(*elec, iat, grad0);
