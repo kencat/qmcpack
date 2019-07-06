@@ -66,7 +66,7 @@ public:
 
   RealType evaluateLog(ParticleSet& P, ParticleSet::ParticleGradient_t& G, ParticleSet::ParticleLaplacian_t& L);
 
-  ValueType ratio(ParticleSet& P, int iat);
+  ValueType evalLogRatio(ParticleSet& P, int iat);
 
   void acceptMove(ParticleSet& P, int iat);
 

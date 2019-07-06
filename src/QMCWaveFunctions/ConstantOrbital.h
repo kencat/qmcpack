@@ -43,7 +43,7 @@ public:
 
   virtual void restore(int iat) override {}
 
-  virtual ValueType ratio(ParticleSet& P, int iat) override { return 1.0; }
+  virtual ValueType evalLogRatio(ParticleSet& P, int iat) override { return 1.0; }
 
   virtual GradType evalGrad(ParticleSet& P, int iat) override { return GradType(0.0); }
 

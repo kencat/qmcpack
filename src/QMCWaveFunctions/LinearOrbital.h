@@ -60,7 +60,7 @@ public:
 
   virtual void restore(int iat) {}
 
-  virtual ValueType ratio(ParticleSet& P, int iat) { return 1.0; }
+  virtual ValueType evalLogRatio(ParticleSet& P, int iat) { return 0.0; }
 
   virtual GradType evalGrad(ParticleSet& P, int iat) { return GradType(coeff); }
 
