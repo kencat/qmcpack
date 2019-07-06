@@ -105,7 +105,7 @@ ExampleHeComponent::RealType ExampleHeComponent::evaluateLog(ParticleSet& P,
   return -Z * (r1 + r2) + std::log(norm * norm) - u;
 }
 
-ExampleHeComponent::ValueType ExampleHeComponent::ratio(ParticleSet& P, int iat)
+ExampleHeComponent::ValueType ExampleHeComponent::evalLogRatio(ParticleSet& P, int iat)
 {
   const int jat = (iat == 0 ? 1 : 0);
 
@@ -127,7 +127,7 @@ ExampleHeComponent::ValueType ExampleHeComponent::ratio(ParticleSet& P, int iat)
   double log_v_old = -Z * (r_old)-u_old;
   double log_v_new = -Z * (r_new)-u_new;
 
-  return std::exp((log_v_new - log_v_old));
+  return (log_v_new - log_v_old);
 }
 
 ExampleHeComponent::GradType ExampleHeComponent::evalGrad(ParticleSet& P, int iat)
