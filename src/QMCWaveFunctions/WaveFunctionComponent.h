@@ -303,7 +303,7 @@ struct WaveFunctionComponent : public QMCTraits
    *
    *Specialized for particle-by-particle move.
    */
-  virtual ValueType ratio(ParticleSet& P, int iat) = 0;
+  virtual ValueType evalLogRatio(ParticleSet& P, int iat) = 0;
 
   /** For particle-by-particle move. Requests space in the buffer
    *  based on the data type sizes of the objects in this class.

@@ -318,7 +318,7 @@ TrialWaveFunction::RealType TrialWaveFunction::ratio(ParticleSet& P, int iat)
   for (int ii = V_TIMER; it != it_end; ++it, ii += TIMER_SKIP)
   {
     myTimers[ii]->start();
-    r *= (*it)->ratio(P, iat);
+    r *= std::exp((*it)->evalLogRatio(P, iat));
     myTimers[ii]->stop();
   }
 #if defined(QMC_COMPLEX)
@@ -337,7 +337,7 @@ TrialWaveFunction::ValueType TrialWaveFunction::full_ratio(ParticleSet& P, int i
 {
   ValueType r(1.0);
   for (size_t i = 0, n = Z.size(); i < n; ++i)
-    r *= Z[i]->ratio(P, iat);
+    r *= std::exp(Z[i]->evalLogRatio(P, iat));
   return r;
 }
 
