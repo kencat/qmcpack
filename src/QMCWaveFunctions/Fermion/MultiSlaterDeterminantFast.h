@@ -110,7 +110,7 @@ public:
   ValueType ratioGrad(ParticleSet& P, int iat, GradType& grad_iat);
   ValueType evalGrad_impl(ParticleSet& P, int iat, bool newpos, GradType& g_at);
 
-  ValueType ratio(ParticleSet& P, int iat);
+  ValueType evalLogRatio(ParticleSet& P, int iat);
   ValueType ratio_impl(ParticleSet& P, int iat);
   void evaluateRatiosAlltoOne(ParticleSet& P, int iat)
   {

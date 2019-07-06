@@ -37,7 +37,7 @@ public:
         NumPtcls(spos->size()),
         NumOrbitals(spos->size()),
         UpdateTimer("DiracDeterminantBase::update", timer_level_fine),
-        RatioTimer("DiracDeterminantBase::ratio", timer_level_fine),
+        RatioTimer("DiracDeterminantBase::evalLogRatio", timer_level_fine),
         InverseTimer("DiracDeterminantBase::inverse", timer_level_fine),
         BufferTimer("DiracDeterminantBase::buffer", timer_level_fine),
         SPOVTimer("DiracDeterminantBase::spoval", timer_level_fine),
@@ -118,7 +118,7 @@ public:
   using WaveFunctionComponent::acceptMove;
   using WaveFunctionComponent::completeUpdates;
   using WaveFunctionComponent::evalGrad;
-  using WaveFunctionComponent::ratio;
+  using WaveFunctionComponent::evalLogRatio;
   using WaveFunctionComponent::ratioGrad;
   using WaveFunctionComponent::restore;
 

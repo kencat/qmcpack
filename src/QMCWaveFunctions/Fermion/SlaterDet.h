@@ -146,7 +146,7 @@ public:
       Dets[i]->completeUpdates();
   }
 
-  virtual inline ValueType ratio(ParticleSet& P, int iat) { return Dets[getDetID(iat)]->ratio(P, iat); }
+  virtual inline ValueType evalLogRatio(ParticleSet& P, int iat) { return Dets[getDetID(iat)]->evalLogRatio(P, iat); }
 
   virtual WaveFunctionComponentPtr makeClone(ParticleSet& tqp) const;
 
@@ -240,7 +240,7 @@ public:
     Dets[getDetID(iat)]->addRatio(W, iat, k, psi_ratios, grad, lapl);
   }
 
-  void ratio(std::vector<Walker_t*>& walkers,
+  void evalLogRatio(std::vector<Walker_t*>& walkers,
              std::vector<int>& iatList,
              std::vector<PosType>& rNew,
              std::vector<ValueType>& psi_ratios,

@@ -25,7 +25,7 @@ MultiSlaterDeterminant::MultiSlaterDeterminant(ParticleSet& targetPtcl, SPOSetPr
       Ratio1Timer("MultiSlaterDeterminant::detEval_ratio"),
       RatioGradTimer("MultiSlaterDeterminant::ratioGrad"),
       Ratio1GradTimer("MultiSlaterDeterminant::detEval_ratioGrad"),
-      RatioAllTimer("MultiSlaterDeterminant::ratio(all)"),
+      RatioAllTimer("MultiSlaterDeterminant::evalLogRatio(all)"),
       Ratio1AllTimer("MultiSlaterDeterminant::detEval_ratio(all)"),
       UpdateTimer("MultiSlaterDeterminant::updateBuffer"),
       AccRejTimer("MultiSlaterDeterminant::Accept_Reject"),
@@ -334,7 +334,7 @@ WaveFunctionComponent::ValueType MultiSlaterDeterminant::ratioGrad(ParticleSet& 
 
 
 // use ci_node for this routine only
-WaveFunctionComponent::ValueType MultiSlaterDeterminant::ratio(ParticleSet& P, int iat)
+WaveFunctionComponent::ValueType MultiSlaterDeterminant::evalLogRatio(ParticleSet& P, int iat)
 {
   UpdateMode = ORB_PBYP_RATIO;
   if (DetID[iat] == 0)
@@ -345,7 +345,7 @@ WaveFunctionComponent::ValueType MultiSlaterDeterminant::ratio(ParticleSet& P, i
     for (int i = 0; i < dets_up.size(); i++)
     {
       spo_up->prepareFor(i);
-      detsRatios[i] = dets_up[i]->ratio(P, iat);
+      detsRatios[i] = std::exp(dets_up[i]->evalLogRatio(P, iat));
     }
     Ratio1Timer.stop();
     std::vector<size_t>::iterator upC(C2node_up.begin()), dnC(C2node_dn.begin());
@@ -362,7 +362,7 @@ WaveFunctionComponent::ValueType MultiSlaterDeterminant::ratio(ParticleSet& P, i
     }
     curRatio = psiNew / psiOld;
     RatioTimer.stop();
-    return curRatio;
+    return std::log(curRatio);
   }
   else
   {
@@ -372,7 +372,7 @@ WaveFunctionComponent::ValueType MultiSlaterDeterminant::ratio(ParticleSet& P, i
     for (int i = 0; i < dets_dn.size(); i++)
     {
       spo_dn->prepareFor(i);
-      detsRatios[i] = dets_dn[i]->ratio(P, iat);
+      detsRatios[i] = std::exp(dets_dn[i]->evalLogRatio(P, iat));
     }
     Ratio1Timer.stop();
     std::vector<size_t>::iterator upC(C2node_up.begin()), dnC(C2node_dn.begin());
@@ -389,7 +389,7 @@ WaveFunctionComponent::ValueType MultiSlaterDeterminant::ratio(ParticleSet& P, i
     }
     curRatio = psiNew / psiOld;
     RatioTimer.stop();
-    return curRatio;
+    return std::log(curRatio);
   }
 }
 

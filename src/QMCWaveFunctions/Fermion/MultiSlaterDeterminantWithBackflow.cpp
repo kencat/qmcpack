@@ -295,7 +295,7 @@ WaveFunctionComponent::ValueType MultiSlaterDeterminantWithBackflow::ratioGrad(P
 }
 
 // use ci_node for this routine only
-WaveFunctionComponent::ValueType MultiSlaterDeterminantWithBackflow::ratio(ParticleSet& P, int iat)
+WaveFunctionComponent::ValueType MultiSlaterDeterminantWithBackflow::evalLogRatio(ParticleSet& P, int iat)
 {
   APP_ABORT("MultiSlaterDeterminantWithBackflow:: pbyp routines not implemented ");
   UpdateMode = ORB_PBYP_RATIO;
@@ -307,7 +307,7 @@ WaveFunctionComponent::ValueType MultiSlaterDeterminantWithBackflow::ratio(Parti
     for (int i = 0; i < dets_up.size(); i++)
     {
       spo_up->prepareFor(i);
-      detsRatios[i] = dets_up[i]->ratio(P, iat);
+      detsRatios[i] = std::exp(dets_up[i]->evalLogRatio(P, iat));
     }
     Ratio1Timer.stop();
     std::vector<size_t>::iterator upC(C2node_up.begin()), dnC(C2node_dn.begin());
@@ -324,7 +324,7 @@ WaveFunctionComponent::ValueType MultiSlaterDeterminantWithBackflow::ratio(Parti
     }
     curRatio = psiNew / psiOld;
     RatioTimer.stop();
-    return curRatio;
+    return std::log(curRatio);
   }
   else
   {
@@ -334,7 +334,7 @@ WaveFunctionComponent::ValueType MultiSlaterDeterminantWithBackflow::ratio(Parti
     for (int i = 0; i < dets_dn.size(); i++)
     {
       spo_dn->prepareFor(i);
-      detsRatios[i] = dets_dn[i]->ratio(P, iat);
+      detsRatios[i] = std::exp(dets_dn[i]->evalLogRatio(P, iat));
     }
     Ratio1Timer.stop();
     std::vector<size_t>::iterator upC(C2node_up.begin()), dnC(C2node_dn.begin());
@@ -351,7 +351,7 @@ WaveFunctionComponent::ValueType MultiSlaterDeterminantWithBackflow::ratio(Parti
     }
     curRatio = psiNew / psiOld;
     RatioTimer.stop();
-    return curRatio;
+    return std::log(curRatio);
   }
 }
 

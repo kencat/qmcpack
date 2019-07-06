@@ -31,7 +31,7 @@ MultiSlaterDeterminantFast::MultiSlaterDeterminantFast(ParticleSet& targetPtcl,
       IsCloned(false),
       RatioTimer("MultiSlaterDeterminantFast::ratio"),
       RatioGradTimer("MultiSlaterDeterminantFast::ratioGrad"),
-      RatioAllTimer("MultiSlaterDeterminantFast::ratio(all)"),
+      RatioAllTimer("MultiSlaterDeterminantFast::evalLogRatio(all)"),
       Ratio1Timer("MultiSlaterDeterminantFast::detEval_ratio"),
       Ratio1GradTimer("MultiSlaterDeterminantFast::detEval_ratioGrad"),
       Ratio1AllTimer("MultiSlaterDeterminantFast::detEval_ratio(all)"),
@@ -367,7 +367,7 @@ WaveFunctionComponent::ValueType MultiSlaterDeterminantFast::ratio_impl(Particle
 }
 
 // use ci_node for this routine only
-WaveFunctionComponent::ValueType MultiSlaterDeterminantFast::ratio(ParticleSet& P, int iat)
+WaveFunctionComponent::ValueType MultiSlaterDeterminantFast::evalLogRatio(ParticleSet& P, int iat)
 {
   if (usingBF)
   {
@@ -376,7 +376,7 @@ WaveFunctionComponent::ValueType MultiSlaterDeterminantFast::ratio(ParticleSet& 
   UpdateMode       = ORB_PBYP_RATIO;
   ValueType psiNew = ratio_impl(P, iat);
   curRatio         = psiNew / psiCurrent;
-  return curRatio;
+  return std::log(curRatio);
 }
 
 void MultiSlaterDeterminantFast::acceptMove(ParticleSet& P, int iat)

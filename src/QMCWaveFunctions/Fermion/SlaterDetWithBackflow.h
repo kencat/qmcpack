@@ -140,7 +140,7 @@ public:
     //BFTrans->evaluate(P);
     ValueType ratio = 1.0;
     for (int i = 0; i < Dets.size(); ++i)
-      ratio *= Dets[i]->ratio(P, iat);
+      ratio *= std::exp(Dets[i]->evalLogRatio(P, iat));
     return ratio;
   }
 

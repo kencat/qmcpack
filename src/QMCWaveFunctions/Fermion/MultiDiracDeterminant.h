@@ -190,7 +190,7 @@ public:
    * These functions should not be called.
    ***************************************************************************/
 
-  ValueType ratio(ParticleSet& P, int iat)
+  ValueType evalLogRatio(ParticleSet& P, int iat)
   {
     APP_ABORT("  MultiDiracDeterminant: This should not be called. \n");
     return ValueType();
