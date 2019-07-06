@@ -458,10 +458,10 @@ public:
 
   void restore(int iat) { C->restore(iat); }
 
-  ValueType ratio(ParticleSet& P, int iat)
+  ValueType evalLogRatio(ParticleSet& P, int iat)
   {
     evaluateTempExponents(P, iat);
-    return std::exp(Jval_t - Jval);
+    return Jval_t - Jval;
   }
 
   void registerData(ParticleSet& P, WFBufferType& buf)

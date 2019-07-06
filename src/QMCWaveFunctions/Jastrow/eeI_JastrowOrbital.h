@@ -733,7 +733,7 @@ public:
       ratios[k] = std::exp(newval[k]);
   }
 
-  ValueType ratio(ParticleSet& P, int iat)
+  ValueType evalLogRatio(ParticleSet& P, int iat)
   {
     const auto& ee_table = P.getDistTable(ee_table_index_);
     const auto& eI_table = P.getDistTable(ei_table_index_);
@@ -767,7 +767,7 @@ public:
     for (int jat = 0; jat < Nelec; jat++)
       oldval -= U[iat * Nelec + jat];
     DiffVal = newval - oldval;
-    return std::exp(DiffVal);
+    return DiffVal;
     //return std::exp(U[iat]-curVal);
     // DiffVal=0.0;
     // const int* pairid(PairID[iat]);

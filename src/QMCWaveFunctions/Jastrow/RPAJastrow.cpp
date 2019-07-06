@@ -256,11 +256,11 @@ RPAJastrow::RealType RPAJastrow::evaluateLog(ParticleSet& P,
   return LogValue;
 }
 
-RPAJastrow::ValueType RPAJastrow::ratio(ParticleSet& P, int iat)
+RPAJastrow::ValueType RPAJastrow::evalLogRatio(ParticleSet& P, int iat)
 {
-  ValueType r(1.0);
+  ValueType r(0.0);
   for (int i = 0; i < Psi.size(); i++)
-    r *= Psi[i]->ratio(P, iat);
+    r += Psi[i]->evalLogRatio(P, iat);
   return r;
 }
 
