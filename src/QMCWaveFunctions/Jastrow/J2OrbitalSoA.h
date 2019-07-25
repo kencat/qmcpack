@@ -177,7 +177,7 @@ struct J2OrbitalSoA : public WaveFunctionComponent
   /** recompute internal data assuming distance table is fully ready */
   void recompute(ParticleSet& P);
 
-  ValueType ratio(ParticleSet& P, int iat);
+  FullPrecValueType calcRatio(ParticleSet& P, int iat);
   void evaluateRatios(VirtualParticleSet& VP, std::vector<ValueType>& ratios)
   {
     for (int k = 0; k < ratios.size(); ++k)
@@ -419,12 +419,12 @@ inline void J2OrbitalSoA<FT>::computeU3(const ParticleSet& P,
 }
 
 template<typename FT>
-typename J2OrbitalSoA<FT>::ValueType J2OrbitalSoA<FT>::ratio(ParticleSet& P, int iat)
+typename J2OrbitalSoA<FT>::FullPrecValueType J2OrbitalSoA<FT>::calcRatio(ParticleSet& P, int iat)
 {
   //only ratio, ready to compute it again
   UpdateMode = ORB_PBYP_RATIO;
   cur_Uat    = computeU(P, iat, P.getDistTable(my_table_ID_).Temp_r.data());
-  return std::exp(Uat[iat] - cur_Uat);
+  return std::exp(static_cast<FullPrecValueType>(Uat[iat] - cur_Uat));
 }
 
 template<typename FT>

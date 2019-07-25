@@ -409,7 +409,7 @@ public:
     return LogValue;
   }
 
-  ValueType ratio(ParticleSet& P, int iat)
+  FullPrecValueType calcRatio(ParticleSet& P, int iat)
   {
     UpdateMode = ORB_PBYP_RATIO;
 

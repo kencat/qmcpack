@@ -256,12 +256,12 @@ RPAJastrow::RealType RPAJastrow::evaluateLog(ParticleSet& P,
   return LogValue;
 }
 
-RPAJastrow::ValueType RPAJastrow::ratio(ParticleSet& P, int iat)
+RPAJastrow::FullPrecValueType RPAJastrow::calcRatio(ParticleSet& P, int iat)
 {
   ValueType r(1.0);
   for (int i = 0; i < Psi.size(); i++)
-    r *= Psi[i]->ratio(P, iat);
-  return r;
+    r *= Psi[i]->calcRatio(P, iat);
+  return static_cast<FullPrecValueType>(r);
 }
 
 RPAJastrow::GradType RPAJastrow::evalGrad(ParticleSet& P, int iat)
