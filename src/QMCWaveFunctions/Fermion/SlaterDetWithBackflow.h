@@ -134,14 +134,14 @@ public:
   }
 
 
-  inline ValueType ratio(ParticleSet& P, int iat)
+  inline FullPrecValueType calcRatio(ParticleSet& P, int iat)
   {
     BFTrans->evaluatePbyP(P, iat);
     //BFTrans->evaluate(P);
     ValueType ratio = 1.0;
     for (int i = 0; i < Dets.size(); ++i)
-      ratio *= Dets[i]->ratio(P, iat);
-    return ratio;
+      ratio *= Dets[i]->calcRatio(P, iat);
+    return static_cast<FullPrecValueType>(ratio);
   }
 
   WaveFunctionComponentPtr makeClone(ParticleSet& tqp) const;

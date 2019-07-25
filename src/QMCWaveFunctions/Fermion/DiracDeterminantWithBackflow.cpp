@@ -203,7 +203,7 @@ void DiracDeterminantWithBackflow::copyFromBuffer(ParticleSet& P, WFBufferType& 
  * @param P current configuration
  * @param iat the particle thas is being moved
  */
-DiracDeterminantWithBackflow::ValueType DiracDeterminantWithBackflow::ratio(ParticleSet& P, int iat)
+DiracDeterminantWithBackflow::FullPrecValueType DiracDeterminantWithBackflow::calcRatio(ParticleSet& P, int iat)
 {
   // FIX FIX FIX : code Woodbury formula
   psiM_temp = psiM;
@@ -236,11 +236,12 @@ DiracDeterminantWithBackflow::ValueType DiracDeterminantWithBackflow::ratio(Part
   InverseTimer.stop();
 #if defined(QMC_COMPLEX)
   RealType ratioMag = std::exp(NewLog - LogValue);
-  return curRatio   = std::complex<OHMMS_PRECISION>(std::cos(NewPhase - PhaseValue) * ratioMag,
+  curRatio   = std::complex<OHMMS_PRECISION>(std::cos(NewPhase - PhaseValue) * ratioMag,
                                                   std::sin(NewPhase - PhaseValue) * ratioMag);
 #else
-  return curRatio = std::cos(NewPhase - PhaseValue) * std::exp(NewLog - LogValue);
+  curRatio = std::cos(NewPhase - PhaseValue) * std::exp(NewLog - LogValue);
 #endif
+  return static_cast<FullPrecValueType>(curRatio);
 }
 
 void DiracDeterminantWithBackflow::evaluateRatiosAlltoOne(ParticleSet& P, std::vector<ValueType>& ratios)

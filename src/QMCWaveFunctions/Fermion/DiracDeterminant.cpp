@@ -255,7 +255,7 @@ void DiracDeterminant<DU_TYPE>::copyFromBuffer(ParticleSet& P, WFBufferType& buf
  * @param iat the particle thas is being moved
  */
 template<typename DU_TYPE>
-typename DiracDeterminant<DU_TYPE>::ValueType DiracDeterminant<DU_TYPE>::ratio(ParticleSet& P, int iat)
+typename DiracDeterminant<DU_TYPE>::FullPrecValueType DiracDeterminant<DU_TYPE>::calcRatio(ParticleSet& P, int iat)
 {
   UpdateMode             = ORB_PBYP_RATIO;
   const int WorkingIndex = iat - FirstIndex;
@@ -273,7 +273,7 @@ typename DiracDeterminant<DU_TYPE>::ValueType DiracDeterminant<DU_TYPE>::ratio(P
   }
   curRatio = simd::dot(invRow.data(), psiV.data(), invRow.size());
   RatioTimer.stop();
-  return curRatio;
+  return static_cast<FullPrecValueType>(curRatio);
 }
 
 template<typename DU_TYPE>

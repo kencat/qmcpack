@@ -190,10 +190,10 @@ public:
    * These functions should not be called.
    ***************************************************************************/
 
-  ValueType ratio(ParticleSet& P, int iat)
+  FullPrecValueType calcRatio(ParticleSet& P, int iat)
   {
     APP_ABORT("  MultiDiracDeterminant: This should not be called. \n");
-    return ValueType();
+    return FullPrecValueType();
   }
 
   GradType evalGrad(ParticleSet& P, int iat)

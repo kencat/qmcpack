@@ -146,7 +146,11 @@ public:
       Dets[i]->completeUpdates();
   }
 
-  virtual inline ValueType ratio(ParticleSet& P, int iat) { return Dets[getDetID(iat)]->ratio(P, iat); }
+  virtual inline FullPrecValueType calcRatio(ParticleSet& P, int iat)
+  {
+    return static_cast<FullPrecValueType>
+    (Dets[getDetID(iat)]->calcRatio(P, iat));
+  }
 
   virtual WaveFunctionComponentPtr makeClone(ParticleSet& tqp) const;
 
