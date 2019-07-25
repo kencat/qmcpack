@@ -53,7 +53,7 @@ public:
 
   void restore(int iat) override {}
 
-  ValueType ratio(ParticleSet& P, int iat) override;
+  FullPrecValueType calcRatio(ParticleSet& P, int iat) override;
 
   GradType evalGrad(ParticleSet& P, int iat) override;
 
