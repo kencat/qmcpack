@@ -18,6 +18,7 @@
 namespace qmcplusplus
 {
 typedef IonOrbital::ValueType ValueType;
+typedef IonOrbital::FullPrecValueType FullPrecValueType;
 typedef IonOrbital::GradType GradType;
 
 IonOrbital::IonOrbital(ParticleSet& centers, ParticleSet& ptcls) : CenterRef(centers)
@@ -89,7 +90,7 @@ IonOrbital::RealType IonOrbital::evaluateLog(ParticleSet& P,
  * @param P active particle set
  * @param iat particle that has been moved.
  */
-ValueType IonOrbital::ratio(ParticleSet& P, int iat)
+FullPrecValueType IonOrbital::calcRatio(ParticleSet& P, int iat)
 {
   const auto& d_table = P.getDistTable(myTableID);
   int icent           = ParticleCenter[iat];
@@ -98,7 +99,7 @@ ValueType IonOrbital::ratio(ParticleSet& P, int iat)
   int index        = d_table.M[icent] + iat;
   RealType newdist = d_table.Temp[icent].r1;
   curVal           = ParticleAlpha[iat] * (newdist * newdist);
-  return std::exp(U[iat] - curVal);
+  return std::exp(static_cast<FullPrecValueType>(U[iat] - curVal));
 }
 
 

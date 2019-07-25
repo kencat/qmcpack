@@ -60,7 +60,10 @@ public:
 
   virtual void restore(int iat) {}
 
-  virtual ValueType ratio(ParticleSet& P, int iat) { return 1.0; }
+  virtual FullPrecValueType calcRatio(ParticleSet& P, int iat)
+  {
+    return static_cast<FullPrecValueType>(1.0);
+  }
 
   virtual GradType evalGrad(ParticleSet& P, int iat) { return GradType(coeff); }
 
