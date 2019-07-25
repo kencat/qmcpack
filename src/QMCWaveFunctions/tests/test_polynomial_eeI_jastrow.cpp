@@ -135,6 +135,7 @@ TEST_CASE("PolynomialFunctor3D Jastrow", "[wavefunction]")
   REQUIRE(KE == Approx(-0.058051245)); // note: number not validated
 
   typedef QMCTraits::ValueType ValueType;
+  typedef QMCTraits::FullPrecValueType FullPrecValueType;
   typedef QMCTraits::PosType PosType;
 
   // set virtutal particle position
@@ -150,19 +151,19 @@ TEST_CASE("PolynomialFunctor3D Jastrow", "[wavefunction]")
   REQUIRE(ratios[3] == ComplexApprox(0.7987703724).compare_real_only());
 
   elec_.makeMove(0, newpos - elec_.R[0]);
-  ValueType ratio_0 = j3->ratio(elec_, 0);
+  FullPrecValueType ratio_0 = j3->calcRatio(elec_, 0);
   elec_.rejectMove(0);
 
   elec_.makeMove(1, newpos - elec_.R[1]);
-  ValueType ratio_1 = j3->ratio(elec_, 1);
+  FullPrecValueType ratio_1 = j3->calcRatio(elec_, 1);
   elec_.rejectMove(1);
 
   elec_.makeMove(2, newpos - elec_.R[2]);
-  ValueType ratio_2 = j3->ratio(elec_, 2);
+  FullPrecValueType ratio_2 = j3->calcRatio(elec_, 2);
   elec_.rejectMove(2);
 
   elec_.makeMove(3, newpos - elec_.R[3]);
-  ValueType ratio_3 = j3->ratio(elec_, 3);
+  FullPrecValueType ratio_3 = j3->calcRatio(elec_, 3);
   elec_.rejectMove(3);
 
   REQUIRE(ratio_0 == ComplexApprox(0.8744938582).compare_real_only());
