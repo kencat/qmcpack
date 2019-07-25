@@ -84,7 +84,7 @@ void WaveFunctionComponent::evaluateRatiosAlltoOne(ParticleSet& P, std::vector<V
 {
   assert(P.getTotalNum() == ratios.size());
   for (int i = 0; i < P.getTotalNum(); ++i)
-    ratios[i] = ratio(P, i);
+    ratios[i] = calcRatio(P, i);
 }
 
 void WaveFunctionComponent::evaluateRatios(VirtualParticleSet& P, std::vector<ValueType>& ratios)
